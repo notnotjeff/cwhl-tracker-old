@@ -20,6 +20,9 @@ class Skater < ApplicationRecord
 		CSV.generate do |csv|
 			column_names.delete("created_at")
 			column_names.delete("updated_at")
+			column_names.delete("shots")
+			column_names.delete("shooting_percent")
+			column_names.delete("shots_pg")
 			csv << column_names
 			all.each do |skater|
 				csv << skater.attributes.values_at(*column_names)
