@@ -978,8 +978,8 @@ class Game < ApplicationRecord
 			add_skaters(g, game_info[:visiting_skaters], game_info[:game_statlines][g.visiting_team_id], season, visiting_team_statline, game_info[:home_team_id], false)
 
 			# Add Goalies To DB
-			add_goalies(g, game_info[:home_goalies], game_info[:home_team_abbreviation], season, home_team_statline)
-			add_goalies(g, game_info[:visiting_goalies], game_info[:visiting_team_abbreviation], season, visiting_team_statline)
+			add_goalies(g, game_info[:home_goalies], game_info[:home_team_abbreviation], season)
+			add_goalies(g, game_info[:visiting_goalies], game_info[:visiting_team_abbreviation], season)
 
 			# Add Coaches To DB
 			add_coaches(g, game_info[:home_coaches]) # unless game_info[:home_coaches].nil?
@@ -1239,7 +1239,7 @@ class Game < ApplicationRecord
 			end
 		end
 
-		def self.add_goalies(game, goalies, abbreviation, season, team_statline)
+		def self.add_goalies(game, goalies, abbreviation, season)
 			goalies.each do |n, g|
 				next if g[:first_name] == nil # Some Seasons Have Blank Players, Skip Them
 
@@ -1260,8 +1260,7 @@ class Game < ApplicationRecord
 																																				team_abbreviation: abbreviation,
 																																				captaincy: g[:captaincy],
 																																				number: g[:number],
-																																				season_abbreviation: season.abbreviation,
-																																				team_abbreviation: team_statline.abbreviation)
+																																				season_abbreviation: season.abbreviation,)
 				rescue ActiveRecord::RecordNotUnique
 					retry
 				end
