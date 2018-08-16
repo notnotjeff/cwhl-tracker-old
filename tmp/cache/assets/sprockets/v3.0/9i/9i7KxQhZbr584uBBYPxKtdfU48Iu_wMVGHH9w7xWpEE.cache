@@ -1,0 +1,9 @@
+I"Ë(function() {
+  $(document).on('turbolinks:load', function() {
+    return $('#start_date').on('input', function() {
+      return $('#end_date').val($('#start_date').val());
+    });
+  });
+
+}).call(this);
+:ET

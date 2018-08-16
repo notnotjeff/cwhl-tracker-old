@@ -1,0 +1,6 @@
+$("#teams-table").html('<%= escape_javascript(render("teams_table", path: "team_statlines")) %>');
+$("#paginate").html('<%= escape_javascript(render("paginate")) %>');
+
+$('#teams-table .active-link').closest('th').attr('id', 'active-th')
+teams_active_column = $('#teams-table .active-link').closest('th').index() + 1
+$('#teams-table table tbody td:nth-child(' + teams_active_column + ')').addClass('active-tcol')

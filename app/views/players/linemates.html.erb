@@ -1,0 +1,49 @@
+<% provide(:title, "#{@player.full_name} Linemates") %>
+<div class="player-info">
+	<h1>
+		<%= @player.full_name %>
+		<%= link_to "Profile", player_path(@player), {class: 'btn btn-default'} %>
+	</h1>
+</div>
+
+<%= form_tag linemates_player_path(@player), :method => 'get' do |f| %>
+  <div class="row">
+    <div class="col-md-2">
+      <%= select_tag :team, options_for_select(@seasons, @team), { class: 'form-control' } %>
+    </div>
+    <div class="col-md-2">
+      <%= select_tag :situation, options_for_select([['All Situations'], ['Even Strength'], ['Powerplay'], ['Shorthanded']], @situation), { class: 'form-control' } %>
+    </div>
+    <div class="col-md-1">
+      <%= select_tag :position, options_for_select([['Any'], ['Forwards'], ['Defensemen']], @position), { class: 'form-control' } %>
+    </div>
+    <div class="col-md-1">
+      <%= submit_tag 'Submit', { class: 'filter-button btn btn-default', id: "gb-button"} %>
+    </div>
+  </div>
+<% end %>
+
+<div class="y-scroll">
+    <table class="table table-bordered">
+    <thead>
+        <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>POS</th>
+        <th>Goal Event%</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% i = 1 %>
+        <% @linemates.each do |id, linemate| %>
+        <tr>
+            <td><%= i %></td>
+            <td><%= linemate[:name] %></td>
+            <td><%= linemate[:position] %></td>
+            <td><%= linemate[:icetime_percent] %>%</td>
+        </tr>
+        <% i += 1 %>
+        <% end -%>
+    </tbody>
+    </table>
+</div>

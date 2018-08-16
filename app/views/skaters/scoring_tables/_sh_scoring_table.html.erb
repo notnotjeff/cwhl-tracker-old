@@ -1,0 +1,50 @@
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="rank-th">#</th>
+      <th class="name-th"><%= sort_link path, "last_name", "Name" %></th>
+      <th><%= sort_link path, "season_id", "Year" %></th>
+      <th><%= sort_link path, "season_age", "Age" %></th>
+      <th><%= sort_link path, "shoots", "H" %></th>
+      <th><%= sort_link path, "team_id", "Team" %></th>
+      <th><%= sort_link path, "position", "POS" %></th>
+      <th><%= sort_link path, "games_played", "GP" %></th>
+      <th><%= sort_link path, "sh_goals", "G" %></th>
+      <th><%= sort_link path, "sh_a1", "A1" %></th>
+      <th><%= sort_link path, "sh_a2", "A2" %></th>
+      <th><%= sort_link path, "sh_points", "P" %></th>
+      <th><%= sort_link path, "sh_pr_points", "PrP" %></th>
+      <th><%= sort_link path, "sh_goals_pg", "G/G" %></th>
+      <th><%= sort_link path, "sh_a1_pg", "A1/G" %></th>
+      <th><%= sort_link path, "sh_a2_pg", "A2/G" %></th>
+      <th><%= sort_link path, "sh_points_pg", "P/G" %></th>
+      <th><%= sort_link path, "sh_pr_points_pg", "PrP/G" %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% i = 1 + ((@page - 1) * 50) %>
+    <% players.each do |player| %>
+      <tr>
+        <td class="rank-tb"><%= i %></td>
+        <td class="name-tb"><%= player.is_rookie_star %><%= link_to player.full_name, player_path(player.player_profile) %></td>
+        <td><%= season == false ? player.season_abbreviation : season %></td>
+        <td><%= player.season_age %></td>
+        <td><%= player.shoots %></td>
+        <td><%= player.team_abbreviation %></td>
+        <td><%= player.position %></td>
+        <td><%= player.games_played %></td>
+        <td><%= player.sh_goals %></td>
+        <td><%= player.sh_a1 %></td>
+        <td><%= player.sh_a2 %></td>
+        <td><%= player.sh_points %></td>
+        <td><%= player.sh_pr_points %></td>
+        <td><%= player.sh_goals_pg %></td>
+        <td><%= player.sh_a1_pg %></td>
+        <td><%= player.sh_a2_pg %></td>
+        <td><%= player.sh_points_pg %></td>
+        <td><%= player.sh_pr_points_pg %></td>
+      </tr>
+      <% i += 1 %>
+    <% end -%>
+  </tbody>
+</table>

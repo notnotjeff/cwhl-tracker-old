@@ -1,0 +1,318 @@
+<% provide(:title, "#{@visiting_team.full_name} @ #{@home_team.full_name}, #{@game.game_date.strftime("%B %d, %Y")}") %>
+
+<div class="row game-banner">
+	<div class="col-md-4">
+		<ul id="visiting-team-profile">
+			<li>Visiting: <%= @visiting_team.full_name %> (<%= @game.visitor_score %>)</li>
+			<li><%= link_to image_tag("logos/#{@visiting_team.team_logo_url}", width: '64', height: '64', class: "team-logo"), team_path(@visiting_team.team_id) %></li>
+			<li>Shots: <%= @game.visitor_total_shots %></li>
+		</ul>
+	</div>
+	<div class="col-md-4">
+		<ul id="game-summary-profile">
+			<li>Date: <%= @game.game_date.strftime("%B %d, %Y") %></li>
+			<li>Time: <%= @game.game_date.strftime("%l:%M %P") %></li>
+			<li>Arena: <%= @game.venue %></li>
+			<li>GameID: <%= @game.cwhl_game_id %></li>
+		</ul>
+	</div>
+	<div class="col-md-4">
+		<ul id="home-team-profile">
+			<li>Home: <%= @home_team.full_name %> (<%= @game.home_score %>)</li>
+			<li><%= link_to image_tag("logos/#{@home_team.team_logo_url}", width: '64', height: '64', class: "team-logo"), team_path(@home_team.team_id) %></li>
+			<li>Shots: <%= @game.home_total_shots %></li>
+		</ul>
+	</div>
+</div>
+
+<h4>Game Scoring</h4>
+
+<table class="table table-bordered">
+  <thead>
+	  <tr>
+      <th>Period</th>
+      <th>Time</th>
+      <th>Situation</th>
+      <th>Team</th>
+      <th>Goal</th>
+      <th>Home On Ice</th>
+      <th>Visitor On Ice</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @game_goals.each do |goal| %>
+		  <tr>
+		    <td><%= goal.period %></td>
+		    <td><%= goal.time_in_minutes %></td>
+		    <td><%= goal.situation %></td>
+		    <td><%= goal.scoring_team %></td>
+		    <td><%= goal.description %></td>
+		    <td><%= goal.home_on_ice %></td>
+		    <td><%= goal.visitor_on_ice %></td>
+		  </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h4>Penalties</h4>
+
+<table class="table table-bordered">
+  <thead>
+	  <tr>
+      <th>Period</th>
+      <th>Time</th>
+      <th>Team</th>
+      <th>Player</th>
+      <th>Penalty</th>
+      <th>Duration</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  	<% if @game_penalties.count == 0 %>
+  		<tr>
+		    <td colspan=5>No Penalties</td>
+		  </tr>
+		<% else %>
+	    <% @game_penalties.each do |penalty| %>
+			  <tr>
+			    <td><%= penalty.period %></td>
+			    <td><%= penalty.time_in_minutes %></td>
+			    <td><%= penalty.team_abbreviation %></td>
+			    <td><%= penalty.player_full_name %></td>
+			    <td><%= penalty.description %></td>
+			    <td><%= penalty.duration_in_minutes %></td>
+			  </tr>
+	    <% end %>
+	  <% end -%>
+  </tbody>
+</table>
+
+<% if @penalty_shots.count > 0 %>
+	<h4>Penalty Shots</h4>
+	<table class="table table-bordered">
+	  <thead>
+		  <tr>
+	      <th>Period</th>
+	      <th>Time</th>
+	      <th>Shooter</th>
+	      <th>Result</th>
+	    </tr>
+	  </thead>
+
+	  <tbody>
+	    <% @penalty_shots.each do |p| %>
+			  <tr>
+			    <td><%= p.period %></td>
+			    <td><%= p.time_in_minutes %></td>
+			    <td><%= p.shooter_name %></td>
+			    <td><%= p.scored_in_words %></td>
+			  </tr>
+	    <% end %>
+	  </tbody>
+	</table>
+<% end -%>
+
+<% if @game.shootout == true  %>
+	<h4>Shootout Attempts</h4>
+	<table class="table table-bordered">
+	  <thead>
+	  	<tr>
+	  		<th colspan="3"><%= @game.home_name %></th>
+	  	</tr>
+		  <tr>
+	      <th>Shot Number</th>
+	      <th>Shooter</th>
+	      <th>Result</th>
+	    </tr>
+	  </thead>
+
+	  <tbody>
+	    <% @home_shootout_attempts.each do |attempt| %>
+			  <tr>
+			    <td><%= attempt.shot_number %></td>
+			    <td><%= attempt.shooter_name %></td>
+			    <td><%= attempt.scored_in_words %></td>
+			  </tr>
+	    <% end %>
+	  </tbody>
+	</table>
+
+	<table class="table table-bordered">
+	  <thead>
+	  	<tr>
+	  		<th colspan="3"><%= @game.visitor_name %></th>
+	  	</tr>
+		  <tr>
+	      <th>Shot Number</th>
+	      <th>Shooter</th>
+	      <th>Result</th>
+	    </tr>
+	  </thead>
+
+	  <tbody>
+	    <% @visitor_shootout_attempts.each do |attempt| %>
+			  <tr>
+			    <td><%= attempt.shot_number %></td>
+			    <td><%= attempt.shooter_name %></td>
+			    <td><%= attempt.scored_in_words %></td>
+			  </tr>
+	    <% end %>
+	  </tbody>
+	</table>
+<% end %>
+
+<h4><%= @home_team.full_name %></h4>
+
+<table class="table table-bordered">
+  <thead>
+  	<tr>
+  		<th colspan="4">Player</th>
+  		<th colspan="4">All Situations</th>
+  		<th colspan="4">Even Strength</th>
+  	</tr>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>POS</th>
+      <th>SOG</th>
+      <th>G</th>
+      <th>A1</th>
+      <th>A2</th>
+      <th>P</th>
+      <th>G</th>
+      <th>A1</th>
+      <th>A2</th>
+      <th>P</th>
+    </tr>
+  </thead>
+	<tbody>
+		<% @home_skaters.each do |skater| %>
+			<tr>
+	      <td><%= skater.number %></td>
+	      <td><%= link_to skater.full_name, player_path(skater.player) %></td>
+	      <td><%= skater.position %></td>
+	      <td><%= skater.shots %></td>
+	      <td><%= skater.goals %></td>
+	      <td><%= skater.a1 %></td>
+	      <td><%= skater.a2 %></td>
+	      <td><%= skater.points %></td>
+	      <td><%= skater.ev_goals %></td>
+	      <td><%= skater.ev_a1 %></td>
+	      <td><%= skater.ev_a2 %></td>
+	      <td><%= skater.ev_points %></td>
+	    </tr>
+	  <% end -%>
+	</tbody>
+</table>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>POS</th>
+      <th>TOI</th>
+      <th>SA</th>
+      <th>SV</th>
+      <th>GA</th>
+      <th>G</th>
+      <th>A</th>
+      <th>P</th>
+    </tr>
+  </thead>
+	<tbody>
+		<% @home_goalies.each do |goalie| %>
+			<tr>
+	      <td><%= goalie.number %></td>
+	      <td><%= goalie.starting_star %><%= link_to goalie.full_name, player_path(goalie.player) %></td>
+	      <td><%= goalie.position %></td>
+	      <td><%= goalie.time_in_minutes %></td>
+	      <td><%= goalie.shots_against %></td>
+	      <td><%= goalie.saves %></td>
+	      <td><%= goalie.goals_against %></td>
+	      <td><%= goalie.goals %></td>
+	      <td><%= goalie.assists %></td>
+	      <td><%= goalie.points %></td>
+	    </tr>
+	  <% end -%>
+	</tbody>
+</table>
+
+<h4><%= @visiting_team.full_name %></h4>
+
+<table class="table table-bordered">
+  <thead>
+  	<tr>
+  		<th colspan="4">Player</th>
+  		<th colspan="4">All Situations</th>
+  		<th colspan="4">Even Strength</th>
+  	</tr>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>POS</th>
+      <th>SOG</th>
+      <th>G</th>
+      <th>A1</th>
+      <th>A2</th>
+      <th>P</th>
+      <th>G</th>
+      <th>A1</th>
+      <th>A2</th>
+      <th>P</th>
+    </tr>
+  </thead>
+	<tbody>
+		<% @visiting_skaters.each do |skater| %>
+			<tr>
+	      <td><%= skater.number %></td>
+	      <td><%= link_to skater.full_name, player_path(skater.player) %></td>
+	      <td><%= skater.position %></td>
+	      <td><%= skater.shots %></td>
+	      <td><%= skater.goals %></td>
+	      <td><%= skater.a1 %></td>
+	      <td><%= skater.a2 %></td>
+	      <td><%= skater.points %></td>
+	      <td><%= skater.ev_goals %></td>
+	      <td><%= skater.ev_a1 %></td>
+	      <td><%= skater.ev_a2 %></td>
+	      <td><%= skater.ev_points %></td>
+	    </tr>
+	  <% end -%>
+	</tbody>
+</table>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>POS</th>
+      <th>TOI</th>
+      <th>SA</th>
+      <th>SV</th>
+      <th>GA</th>
+      <th>G</th>
+      <th>A</th>
+      <th>P</th>
+    </tr>
+  </thead>
+	<tbody>
+		<% @visitor_goalies.each do |goalie| %>
+			<tr>
+	      <td><%= goalie.number %></td>
+	      <td><%= goalie.starting_star %><%= link_to goalie.full_name, player_path(goalie.player) %></td>
+	      <td><%= goalie.position %></td>
+	      <td><%= goalie.time_in_minutes %></td>
+	      <td><%= goalie.shots_against %></td>
+	      <td><%= goalie.saves %></td>
+	      <td><%= goalie.goals_against %></td>
+	      <td><%= goalie.goals %></td>
+	      <td><%= goalie.assists %></td>
+	      <td><%= goalie.points %></td>
+	    </tr>
+	  <% end -%>
+	</tbody>
+</table>

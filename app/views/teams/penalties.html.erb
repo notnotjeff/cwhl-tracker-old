@@ -1,0 +1,27 @@
+<% provide(:title, "#{@team.full_name} Penalties") %>
+
+<div class="row">
+	<div class="col-md-1"><%= image_tag("logos/#{@team.logo_url}", width: '64', height: '64', class: "team-logo") %></div>
+	<div class="col-md-11">
+		<h1>
+			<%= @team.full_name %> Penalties
+			<%= link_to "Profile", team_path(@team), {class: 'btn btn-default'} %>
+		</h1>
+	</div>
+	
+</div>
+<br>
+<%= link_to "CSV".html_safe, penalties_team_path(@team, params[:season], format: "csv"), { class: "btn btn-success btn-sm btn-csv" } %>
+
+<div class="game-by-game-form">
+	<%= form_tag penalties_team_path(@team), :method => 'get' do %>
+		<div class="row">
+			<div class="col-md-1"><%= select_tag :season, options_for_select(@seasons_for_option, @season), { class: 'form-control' } %></div>
+			<div class="col-md-1"><%= submit_tag 'Select', { class: 'year-filter-button btn btn-default'} %></div>
+		</div>
+	<% end -%>
+</div>
+
+<div class="table-scroll" id="teams-profile-penalties">
+	<%= render 'team_profile_penalties_table', path: "team_penalties" %>
+</div>

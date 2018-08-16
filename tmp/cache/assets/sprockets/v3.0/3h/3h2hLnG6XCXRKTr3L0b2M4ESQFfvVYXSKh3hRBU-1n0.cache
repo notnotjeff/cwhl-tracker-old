@@ -1,0 +1,9 @@
+I"œ(function() {
+  $(document).on('turbolinks:load', function() {
+    return $("#game_ids").selectize({
+      theme: "bootstrap"
+    });
+  });
+
+}).call(this);
+:ET

@@ -1,0 +1,50 @@
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="rank-th">#</th>
+      <th class="name-th"><%= sort_link path, "last_name", "Name" %></th>
+      <th><%= sort_link path, "season_id", "Year" %></th>
+      <th><%= sort_link path, "season_age", "Age" %></th>
+      <th><%= sort_link path, "team_id", "Team" %></th>
+      <th><%= sort_link path, "games_played", "GP" %></th>
+      <th><%= sort_link path, "goals_against", "GA" %></th>
+      <th><%= sort_link path, "shots_against", "SA" %></th>
+      <th><%= sort_link path, "saves", "SV" %></th>
+      <th><%= sort_link path, "goals_against_average", "GAA" %></th>
+      <th><%= sort_link path, "save_percentage", "SV%" %></th>
+      <th><%= sort_link path, "shots_against_pg", "SA/G" %></th>
+      <th><%= sort_link path, "saves_pg", "SV/G" %></th>
+      <th><%= sort_link path, "goals", "G" %></th>
+      <th><%= sort_link path, "assists", "A" %></th>
+      <th><%= sort_link path, "points", "P" %></th>
+      <th><%= sort_link path, "penalties", "PEN" %></th>
+      <th><%= sort_link path, "penalty_minutes", "PIM" %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% i = 1 + ((@page - 1) * 50) %>
+    <% goalies.each do |goalie| %>
+      <tr>
+        <td class="rank-tb"><%= i %></td>
+        <td class="name-tb"><%= goalie.is_rookie_star %><%= link_to goalie.full_name, player_path(goalie.player_profile) %></td>
+        <td><%= season == false ? goalie.season_abbreviation : season %></td>
+        <td><%= goalie.season_age %></td>
+        <td><%= goalie.team_abbreviation %></td>
+        <td><%= goalie.games_played %></td>
+        <td><%= goalie.goals_against %></td>
+        <td><%= goalie.shots_against %></td>
+        <td><%= goalie.saves %></td>
+        <td><%= goalie.goals_against_average %></td>
+        <td><%= goalie.save_percentage %></td>
+        <td><%= goalie.shots_against_pg %></td>
+        <td><%= goalie.saves_pg %></td>
+        <td><%= goalie.goals %></td>
+        <td><%= goalie.assists %></td>
+        <td><%= goalie.points %></td>
+        <td><%= goalie.penalties %></td>
+        <td><%= goalie.penalty_minutes %></td>
+      </tr>
+      <% i += 1 %>
+    <% end -%>
+  </tbody>
+</table>

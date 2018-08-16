@@ -1,0 +1,37 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Team</th>
+            <th><%= sort_link "opposition_breakdown", "games_played", "GP" %></th>
+            <th><%= sort_link "opposition_breakdown", "goals", "G" %></th>
+            <th><%= sort_link "opposition_breakdown", "a1", "A1" %></th>
+            <th><%= sort_link "opposition_breakdown", "a2", "A2" %></th>
+            <th><%= sort_link "opposition_breakdown", "points", "P" %></th>
+            <th><%= sort_link "opposition_breakdown", "shots", "S" %></th>
+            <th><%= sort_link "opposition_breakdown", "goals_pg", "G/G" %></th>
+            <th><%= sort_link "opposition_breakdown", "a1_pg", "A1/G" %></th>
+            <th><%= sort_link "opposition_breakdown", "a2_pg", "A2/G" %></th>
+            <th><%= sort_link "opposition_breakdown", "points_pg", "P/G" %></th>
+            <th><%= sort_link "opposition_breakdown", "shots_pg", "S/G" %></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <% @teams.each do |team| %>
+            <tr>
+                <td><%= TeamStatline.find_by(team_code: team.opposing_team_id, season_id: team.season_id).full_name %></td>
+                <td><%= team.games_played %></td>
+                <td><%= team.goals %></td>
+                <td><%= team.a1 %></td>
+                <td><%= team.a2 %></td>
+                <td><%= team.points %></td>
+                <td><%= team.shots %></td>
+                <td><%= team.goals_pg %></td>
+                <td><%= team.a1_pg %></td>
+                <td><%= team.a2_pg %></td>
+                <td><%= team.points_pg %></td>
+                <td><%= team.shots_pg %></td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>

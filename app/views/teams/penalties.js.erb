@@ -1,0 +1,5 @@
+$("#teams-profile-penalties").html('<%= escape_javascript(render("team_profile_penalties_table", path: "team_penalties")) %>');
+
+$('#teams-profile-penalties .active-link').closest('th').attr('id', 'active-th')
+teams_penalties_active_column = $('#teams-profile-penalties .active-link').closest('th').index() + 1
+$('#teams-profile-penalties table tbody td:nth-child(' + teams_penalties_active_column + ')').addClass('active-tcol')

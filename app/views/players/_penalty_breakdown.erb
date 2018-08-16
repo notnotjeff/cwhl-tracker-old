@@ -1,0 +1,24 @@
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="rank-th">#</th>
+      <th class="name-th"><%= sort_link path, "game_name", "Game" %></th>
+      <th><%= sort_link path, "game_date", "Date" %></th>
+      <th><%= sort_link path, "description", "Description" %></th>
+      <th><%= sort_link path, "duration", "Duration" %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% i = 1 %>
+    <% @penalties.each do |penalty| %>
+      <tr>
+        <td class="rank-tb"><%= i %></td>
+        <td class="name-tb"><%= link_to penalty.game_name, game_path(penalty.game) %></td>
+        <td><%= penalty.game_date.strftime("%m/%d/%Y") %></td>
+        <td><%= penalty.description %></td>
+        <td><%= penalty.duration_in_minutes %></td>
+      </tr>
+      <% i += 1  %>
+    <% end -%>
+  </tbody>
+</table>

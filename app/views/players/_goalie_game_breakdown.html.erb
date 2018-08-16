@@ -1,0 +1,30 @@
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="rank-th">#</th>
+      <th class="name-th"><%= sort_link path, "game_name", "Game" %></th>
+      <th><%= sort_link path, "game_date", "Date" %></th>
+      <th><%= sort_link path, "shots_against", "SA" %></th>
+      <th><%= sort_link path, "goals_against", "GA" %></th>
+      <th><%= sort_link path, "saves", "SV" %></th>
+      <th><%= sort_link path, "save_percent", "SV%" %></th>
+      <th><%= sort_link path, "time_on_ice", "TOI" %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% i = 1 %>
+    <% games.each do |game| %>
+      <tr>
+        <td class="rank-tb"><%= i %></td>
+        <td class="name-tb"><%= link_to game.game_name, game_path(Game.find_by(cwhl_game_id: game.game_id)) %></td>
+        <td><%= game.game_date.strftime("%Y/%m/%d") %></td>
+        <td><%= game.shots_against %></td>
+        <td><%= game.goals_against %></td>
+        <td><%= game.saves %></td>
+        <td><%= game.save_percent_to_percentage %></td>
+        <td><%= game.time_in_minutes %></td>
+      </tr>
+      <% i += 1  %>
+    <% end -%>
+  </tbody>
+</table>

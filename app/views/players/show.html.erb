@@ -1,0 +1,90 @@
+<% provide(:title, @player.full_name) %>
+<div class="player-info">
+	<h1>
+		<%= @player.full_name %>
+		<%= link_to "Goal Breakdown", goal_breakdown_player_path(@player), {class: 'btn btn-default'} unless @player.position == "G" %>
+		<%= link_to "Monthly Breakdown", monthly_breakdown_player_path(@player), {class: 'btn btn-default'} unless @player.position == "G" %>
+		<%= link_to "Linemates", linemates_player_path(@player), {class: 'btn btn-default'} unless @player.position == "G" %>
+		<%= link_to "Opposition Breakdown", opposition_breakdown_player_path(@player), {class: 'btn btn-default'} unless @player.position == "G" %>
+	</h1>
+	<ul class="bio-list">
+		<li>Position: <%= @player.position %></li>
+		<li>Shoots: <%= @player.shoots %></li>
+		<li>Birthdate: <%= @player.birthdate %> (<%= @player.age %>)</li>
+		<li>Height: <%= @player.height %></li>
+		<li>Weight: <%= @player.weight %></li>
+	</ul>
+</div>
+
+<h2>Career Statistics</h2>
+<% if @player.position == "G" %>
+	<div class="player-show-statistics-form">
+		<%= form_tag player_path(@player), :method => 'get' do %>
+			<div class="row">
+				<div class="col-md-2">
+					<%= select_tag :goalie_report, options_for_select(Goalie.situation_options, params[:goalie_report]), { class: 'form-control' } %>
+				</div>
+				<div class="col-md-2">
+					<%= check_box_tag :regular, "true", @is_regular %>
+					<%= label_tag :regular, "Regular Season" %> <br>
+					<%= check_box_tag :playoffs, "true", @is_playoffs %>
+					<%= label_tag :playoffs, "Playoffs" %>
+				</div>
+				<div class="col-md-2">
+					<%= submit_tag 'Filter', { class: 'filter-button btn btn-default', id: "goalie-profile-filter"} %>
+				</div>
+			</div>
+		<% end %>
+	</div>
+<% else %>
+	<div class="player-show-statistics-form">
+		<%= form_tag player_path(@player), :method => 'get' do %>
+			<div class="row">
+				<div class="col-md-2">
+					<%= select_tag :situation, options_for_select(Skater.situation_options, @situation), { class: 'form-control' } %>
+				</div>
+				<div class="col-md-2">
+					<%= select_tag :report, options_for_select(Skater.report_options, @report), { class: 'form-control' } %>
+				</div>
+				<div class="col-md-2">
+					<%= check_box_tag :regular, "true", @is_regular %>
+					<%= label_tag :regular, "Regular Season" %> <br>
+					<%= check_box_tag :playoffs, "true", @is_playoffs %>
+					<%= label_tag :playoffs, "Playoffs" %>
+				</div>
+				<div class="col-md-2"><%= submit_tag 'Filter', { class: 'filter-button btn btn-default', id: 'player-filter'}%></div>
+			</div>
+		<% end %>
+	</div>
+<% end %>
+
+<div class="table-scroll" id="player-profile-table">
+	<%= render 'player_profile_table', path: "player" %>
+</div>
+
+<h2>Yearly Breakdown</h2>
+<div class="game-by-game-form">
+	<%= form_tag player_path(@player), :method => 'get' do %>
+		<div class="row">
+			<div class="col-md-2"><%= select_tag :season, options_for_select(@seasons_for_option, @season_games), { class: 'form-control' } %></div>
+			<div class="col-md-1"><%= submit_tag 'Select', { class: 'year-filter-button btn btn-default'} %></div>
+		</div>
+	<% end -%>
+</div>
+
+<h3>Games</h3>
+<div class="table-scroll player-game-breakdown" id="player-game-breakdown">
+	<%= render 'player_game_breakdown_table', path: "player_game" %>
+</div>
+
+<h3>Penalties</h3>
+<div class="table-scroll player-penalty-breakdown" id="player-penalty-breakdown">
+	<%= render 'penalty_breakdown', penalties: @penalties, path: "player_penalties" %>
+</div>
+
+<% if @player.position != "G" %>
+	<h3>On Ice Goal Events</h3>
+	<div class="table-scroll player-on-ice-events" id="player-on-ice-events">
+		<%= render 'on_ice_events', penalties: @on_ice_events, path: "player_on_ice_events" %>
+	</div>
+<% end %>

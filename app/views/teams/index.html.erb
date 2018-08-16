@@ -1,0 +1,59 @@
+<% provide(:title, "Teams") %>
+
+<div class="heading">
+  <h1>Teams</h1>
+</div>
+
+<%= render 'filter' %>
+
+<div class="row desc-heading">
+  <div class="col-md-6">
+    <span class="table-category"><%= @category %></span>
+    <span>
+      <%= link_to "CSV".html_safe, teams_path(page: params[:page], 
+                                              category: params[:category], 
+                                              year_start: params[:year_start], 
+                                              year_end: params[:year_end], 
+                                              regular: params[:regular], 
+                                              playoffs: params[:playoffs], 
+                                              teams: params[:teams], 
+                                              aggregate: params[:aggregate], format: "csv"), { class: "btn btn-success btn-sm btn-csv" } %>
+    </span>
+  </div>
+</div>
+
+<div class="table-scroll table-responsive" id="teams-table">
+  <%= render 'teams_table', path: "team_statlines" %>
+</div>
+
+<div id="paginate">
+  <%= render 'paginate' %>
+</div>
+
+<div id="show-legend">
+  <span>[+] Show Legend</span>
+</div>
+
+<div id="legend" class="table-legend">
+  <% if @category == "Penalty Breakdown" %>
+  	<%= render 'teams/legend/penalty_legend' %>
+  <% elsif @category == "Shot Stats" %>
+  	<%= render 'teams/legend/shot_stats_legend' %>
+  <% elsif @category == "Goal Stats" %>
+  	<%= render 'teams/legend/goal_stats_legend' %>
+  <% elsif @category == "Shootout Stats" %>
+  	<%= render 'teams/legend/so_legend' %>
+  <% elsif @category == "Period Breakdown" %>
+  	<%= render 'teams/legend/period_breakdown_legend' %>
+  <% elsif @category == "Even Strength Goal Breakdown" %>
+  	<%= render 'teams/legend/ev_gb_legend' %>
+  <% elsif @category == "Powerplay Goal Breakdown" %>
+  	<%= render 'teams/legend/pp_gb_legend' %>
+  <% elsif @category == "Shorthanded Goal Breakdown" %>
+  	<%= render 'teams/legend/sh_gb_legend' %>
+  <% elsif @category == "Empty Net Goal Breakdown" %>
+  	<%= render 'teams/legend/en_gb_legend' %>
+  <% else @category == "Game Stats" %>
+  	<%= render 'teams/legend/game_stats_legend' %>
+  <% end %>
+</div>

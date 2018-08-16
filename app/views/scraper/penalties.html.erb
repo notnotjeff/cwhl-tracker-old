@@ -1,0 +1,16 @@
+<table>
+  <thead>
+    <tr>
+      <td>Penalty</td>
+      <td>Duration</td>
+    </tr>
+  </thead>
+  <tbody>
+    <% @penalties.each do |penalty| %>
+    <tr>
+      <td><%= penalty[0] %></td>
+      <td><%= penalty[1] %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

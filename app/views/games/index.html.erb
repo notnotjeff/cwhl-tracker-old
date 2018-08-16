@@ -1,0 +1,44 @@
+<% provide(:title, "Games") %>
+
+<div class="heading">
+  <h1>Games</h1>
+</div>
+
+<%= render 'filter' %>
+
+<div class="table-scroll" id="games-table">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Date</th>
+        <th>Away Team</th>
+        <th>Away Score</th>
+        <th>Home Team</th>
+        <th>Home Score</th>
+        <th>Summary</th>
+        <th>Ended</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% i = 1 + ((@page - 1) * 50) %>
+    	<% @games.each do |game| %>
+  	    <tr>
+          <td><%= i %></td>
+  	      <td>
+            <%= game.game_date.strftime("%m-%d-%Y") %>
+          </td>
+  	      <td><%= link_to game.visitor_name, team_path(Team.find_by(team_code:game.visiting_team_id)) %></td>
+  	      <td><%= game.visitor_score %></td>
+  	      <td><%= link_to game.home_name, team_path(Team.find_by(team_code:game.home_team_id)) %></td>
+  	      <td><%= game.home_score %></td>
+          <td><%= link_to "Link", game_path(game) %></td>
+          <td><%= game.ended_in %></td>
+  	    </tr>
+        <% i += 1 %>
+  	  <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= paginate @games %>

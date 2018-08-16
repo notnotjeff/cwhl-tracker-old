@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  game_id: 1
+  season_id: 1
+  team_id: 1
+  player_id: 1
+  goalie_id: 1
+  scored: false
+  game_winner: false
+  shot_number: 1
+
+two:
+  game_id: 1
+  season_id: 1
+  team_id: 1
+  player_id: 1
+  goalie_id: 1
+  scored: false
+  game_winner: false
+  shot_number: 1

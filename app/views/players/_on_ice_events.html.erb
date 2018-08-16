@@ -1,0 +1,30 @@
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="rank-th">#</th>
+      <th class="name-th"><%= sort_link path, "game_id", "GameID" %></th>
+      <th><%= sort_link path, "game_date", "Date" %></th>
+      <th><%= sort_link path, "on_scoring_team", "Result" %></th>
+      <th><%= sort_link path, "period", "Period" %></th>
+      <th><%= sort_link path, "time", "Time" %></th>
+      <th><%= sort_link path, "teammate_count", "Teammates" %></th>
+      <th><%= sort_link path, "opposing_skaters_count", "Opponents" %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% i = 1 %>
+    <% @on_ice_events.each do |event| %>
+      <tr>
+        <td class="rank-tb"><%= i %></td>
+        <td class="name-tb"><%= link_to event.game.game_name, game_path(event.game) %></td>
+        <td><%= event.game_date.strftime("%m/%d/%Y") %></td>
+        <td><%= event.result %></td>
+        <td><%= event.period %></td>
+        <td><%= event.time_in_minutes %></td>
+        <td><%= event.teammate_count %></td>
+        <td><%= event.opposing_skaters_count %></td>
+      </tr>
+      <% i += 1  %>
+    <% end -%>
+  </tbody>
+</table>

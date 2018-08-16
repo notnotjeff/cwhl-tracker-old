@@ -1,0 +1,54 @@
+<table class="table table-bordered">
+	  <thead>
+	    <tr>
+	    	<th class="rank-th">#</th>
+			<th class="name-th"><%= sort_link path, "city", "Name" %></th>
+      		<th><%= sort_link path, "season_id", "Year" %></th>
+			<th><%= sort_link path, "games_played", "GP" %></th>
+			<th><%= sort_link path, "ev_goals_for", "EVGF" %></th>
+			<th><%= sort_link path, "ev_goals_against", "EVGA" %></th>
+			<th><%= sort_link path, "pp_goals_for", "PPGF" %></th>
+			<th><%= sort_link path, "pp_goals_against", "PPGA" %></th>
+			<th><%= sort_link path, "sh_goals_for", "SHGF" %></th>
+			<th><%= sort_link path, "sh_goals_against", "SHGA" %></th>
+			<th><%= sort_link path, "goals_for_pg", "GF/G" %></th>
+			<th><%= sort_link path, "goals_against_pg", "GA/G" %></th>
+			<th><%= sort_link path, "goals_percent", "GF%" %></th>
+			<th><%= sort_link path, "ev_goals_for_pg", "EVGF/G" %></th>
+			<th><%= sort_link path, "ev_goals_against_pg", "EVGA/G" %></th>
+			<th><%= sort_link path, "ev_goals_percent", "EVGF%" %></th>
+			<th><%= sort_link path, "pp_goals_for_pg", "PPGF/G" %></th>
+			<th><%= sort_link path, "pp_goals_against_pg", "PPGA/G" %></th>
+			<th><%= sort_link path, "sh_goals_for_pg", "SHGF/G" %></th>
+			<th><%= sort_link path, "sh_goals_against_pg", "SHGA/G" %></th>
+	    </tr>
+	  </thead>
+	<tbody>
+		<% i = 1 + ((@page - 1) * 50) %>
+		<% teams.each do |team| %>
+			<tr>
+				<td class="rank-tb"><%= i %></td>
+				<td class="name-tb"><%= link_to team.full_name, team_path(team.team_id) %></td>
+				<td><%= season == false ? team.season : season %></td>
+				<td><%= team.games_played %></td>
+				<td><%= team.ev_goals_for %></td>
+				<td><%= team.ev_goals_against %></td>
+				<td><%= team.pp_goals_for %></td>
+				<td><%= team.pp_goals_against %></td>
+				<td><%= team.sh_goals_for %></td>
+				<td><%= team.sh_goals_against %></td>
+				<td><%= team.goals_for_pg %></td>
+				<td><%= team.goals_against_pg %></td>
+				<td><%= team.goals_percent %>%</td>
+				<td><%= team.ev_goals_for_pg %></td>
+				<td><%= team.ev_goals_against_pg %></td>
+				<td><%= team.ev_goals_percent %>%</td>
+				<td><%= team.pp_goals_for_pg %></td>
+				<td><%= team.pp_goals_against_pg %></td>
+				<td><%= team.sh_goals_for_pg %></td>
+				<td><%= team.sh_goals_against_pg %></td>
+			</tr>
+		<% i += 1 %>
+		<% end -%>
+	</tbody>
+</table>

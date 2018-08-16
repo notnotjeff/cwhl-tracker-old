@@ -1,0 +1,5 @@
+<% if @player.position == "G" %>
+  <%= render 'goalie_game_breakdown', games: @games, path: path %>
+<% else %>
+  <%= render 'skater_game_breakdown', games: @games, path: path %>
+<% end -%>

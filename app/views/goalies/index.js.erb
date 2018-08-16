@@ -1,0 +1,6 @@
+$("#goalies-table").html('<%= escape_javascript(render("goalies_table", path: "goalies")) %>');
+$("#paginate").html('<%= escape_javascript(render("paginate")) %>');
+
+$('#goalies-table .active-link').closest('th').attr('id', 'active-th');
+active_column = $('#goalies-table .active-link').closest('th').index() + 1;
+$('#goalies-table table tbody td:nth-child(' + active_column + ')').addClass('active-tcol');

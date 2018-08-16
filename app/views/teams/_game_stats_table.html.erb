@@ -1,0 +1,52 @@
+<table class="table table-bordered">
+  <thead>
+    <tr>
+    	<th class="rank-th">#</th>
+      <th class="name-th"><%= sort_link path, "city", "Name" %></th>
+      <th><%= sort_link path, "season_id", "Year" %></th>
+      <th><%= sort_link path, "games_played", "GP" %></th>
+      <th><%= sort_link path, "wins", "W" %></th>
+      <th><%= sort_link path, "ot_wins", "OTW" %></th>
+      <th><%= sort_link path, "so_wins", "SOW" %></th>
+      <th><%= sort_link path, "losses", "L" %></th>
+      <th><%= sort_link path, "ot_losses", "OTL" %></th>
+      <th><%= sort_link path, "so_losses", "SOL" %></th>
+      <th><%= sort_link path, "points", "PTS" %></th>
+      <th><%= sort_link path, "points_percentage", "PTS%" %></th>
+      <th><%= sort_link path, "row", "ROW" %></th>
+      <th><%= sort_link path, "goals_for", "GF" %></th>
+      <th><%= sort_link path, "goals_against", "GA" %></th>
+      <th><%= sort_link path, "penalty_minutes", "PIM" %></th>
+      <th><%= sort_link path, "shooting_percent", "S%" %></th>
+      <th><%= sort_link path, "save_percent", "SV%" %></th>
+      <th><%= sort_link path, "pdo", "PDO" %></th>
+    </tr>
+  </thead>
+	<tbody>
+		<% i = 1 + ((@page - 1) * 50) %>
+		<% teams.each do |team| %>
+			<tr>
+				<td class="rank-tb"><%= i %></td>
+				<td class="name-tb"><%= link_to team.full_name, team_path(team.team_id) %></td>
+				<td><%= season == false ? team.season : season %></td>
+				<td><%= team.games_played %></td>
+				<td><%= team.wins %></td>
+				<td><%= team.ot_wins %></td>
+				<td><%= team.so_wins %></td>
+				<td><%= team.losses %></td>
+				<td><%= team.ot_losses %></td>
+				<td><%= team.so_losses %></td>
+				<td><%= team.points %></td>
+				<td><%= team.points_percentage %></td>
+				<td><%= team.row %></td>
+				<td><%= team.goals_for %></td>
+				<td><%= team.goals_against %></td>
+				<td><%= team.penalty_minutes %></td>
+				<td><%= team.shooting_percent %>%</td>
+				<td><%= team.save_percent %>%</td>
+				<td><%= team.pdo %></td>
+			</tr>
+			<% i += 1 %>
+		<% end -%>
+	</tbody>
+</table>

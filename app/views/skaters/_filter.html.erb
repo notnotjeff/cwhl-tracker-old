@@ -1,0 +1,75 @@
+<div class="filter-container">
+	<%= form_tag skaters_path, :method => 'get' do %>
+		<%= hidden_field_tag :direction, params[:direction] %>
+		<%= hidden_field_tag :column, params[:column] %>
+		<div class="row filter-row">
+			<div class="col-md-2">
+				<%= label_tag :situation, 'Situation:'  %>
+				<%= select_tag :situation, options_for_select(Skater.situation_options, @situation), { class: 'form-control' } %>
+			</div>
+			<div class="col-md-2">
+				<%= label_tag :report, 'Report:'  %>
+				<%= select_tag :report, options_for_select(Skater.report_options, @report), { class: 'form-control' } %>
+			</div>
+			<div class="col-md-2">
+				<%= label_tag :year_start, 'Year Start:'  %>
+				<%= select_tag :year_start, options_for_select(Season.year_start_for_option, @year_start), { class: 'form-control' } %>
+			</div>
+			<div class="col-md-2">
+				<%= label_tag :year_end, 'Year End:'  %>
+				<%= select_tag :year_end, options_for_select(Season.year_end_for_option, @year_end), { class: 'form-control' } %>
+			</div>
+			<div class="col-md-2">
+				<span class="filter-label">Season Type:</span>
+				<%= check_box_tag :regular, "true", @is_regular %>
+				<%= label_tag :regular, "Regular Season" %> <br>
+				<%= check_box_tag :playoffs, "true", @is_playoffs %>
+				<%= label_tag :playoffs, "Playoffs" %>
+			</div>
+			<div class="col-md-2">
+				<%= label_tag :aggregate, 'Aggregate:'  %>
+				<%= select_tag :aggregate, options_for_select([["None", 0], ["Selected Seasons", 1], ["In Season", 2]], @aggregate), { class: 'form-control' } %>
+			</div>
+		</div>
+		<div class="row filter-row">
+			<div class="col-md-2">
+				<%= label_tag :position, 'Position:'  %>
+				<%= select_tag :position, options_for_select(Skater.position_options, params[:position]), { class: 'form-control' } %>
+			</div>
+			<div class="col-md-2">
+				<%= label_tag :handedness, 'Handedness:'  %>
+				<%= select_tag :handedness, options_for_select(Skater.handedness_options, params[:handedness]), { class: 'form-control' } %>
+			</div>
+			<div class="col-md-2">
+				<%= label_tag :min_games_played, 'Games Played:' %>
+				<%= number_field_tag :min_games_played, @min_games_played, { class: 'form-control' } %>
+			</div>
+			<div class="col-md-2">
+				<%= label_tag :min_age, 'Min Age:'  %>
+				<%= number_field_tag :min_age, @low_age, { within: 18..50, class: 'form-control' } %>
+			</div>
+			<div class="col-md-2">
+				<%= label_tag :max_age, 'Max Age:'  %>
+				<%= number_field_tag :max_age, @high_age, { within: 18..50, class: 'form-control' } %>
+			</div>
+			<div class="col-md-2">
+				<span class="filter-label">Set Status:</span>
+				<%= check_box_tag :rookie, 1, checked  %>
+				<%= label_tag :rookie, 'Only Rookies'  %>
+			</div>
+		</div>
+
+		<div class="row filter-row">
+			<div class="col-md-6">
+				<%= label_tag :skater_select, 'Select Skaters:'  %>
+				<%= select_tag :skater_select, options_for_select(Skater.tokens_for_option, @selected_skaters), { class: 'form-control', multiple: true }  %>
+			</div>
+			<div class="col-md-6">
+				<%= label_tag :teams, 'Teams:'  %>
+				<%= select_tag :teams, options_for_select(Team.team_names_for_option, @team_ids), { class: 'form-control', multiple: true } %>
+			</div>
+		</div>
+
+		<%= submit_tag 'Filter', { class: 'filter-button btn btn-default'} %>
+	<% end -%>
+</div>

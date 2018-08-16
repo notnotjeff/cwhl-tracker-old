@@ -1,0 +1,10 @@
+$("#team-profile").html('<%= escape_javascript(render("team_profile_table", path: "team")) %>');
+$("#team-game-breakdown").html('<%= escape_javascript(render("team_game_breakdown_table", path: "team_games")) %>');
+
+$('#team-profile .active-link').closest('th').attr('id', 'active-th')
+profile_active_column = $('#team-profile .active-link').closest('th').index() + 1
+$('#team-profile table tbody td:nth-child(' + profile_active_column + ')').addClass('active-tcol')
+
+$('#team-game-breakdown .active-link').closest('th').attr('id', 'active-th')
+team_game_breakdown_active_column = $('#team-game-breakdown .active-link').closest('th').index() + 1
+$('#team-game-breakdown table tbody td:nth-child(' + team_game_breakdown_active_column + ')').addClass('active-tcol')

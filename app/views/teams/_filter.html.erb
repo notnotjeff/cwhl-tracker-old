@@ -1,0 +1,39 @@
+<div class="filter-container">
+	<%= form_tag teams_path, :method => 'get' do %>
+		<%= hidden_field_tag :direction, params[:direction] %>
+		<%= hidden_field_tag :column, params[:column] %>
+		<div class="row filter-row">
+			<div class="col-md-3">
+				<%= label_tag :year_start, 'Year Start:'  %>
+				<%= select_tag :year_start, options_for_select(Season.year_start_for_option, @year_start), { class: 'form-control' } %>
+			</div>
+			<div class="col-md-3">
+				<%= label_tag :year_end, 'Year End:'  %>
+				<%= select_tag :year_end, options_for_select(Season.year_end_for_option, @year_end), { class: 'form-control' } %>
+			</div>
+			<div class="col-md-2">
+				<span class="filter-label">Season Type:</span>
+				<%= check_box_tag :regular, "true", @is_regular %>
+				<%= label_tag :regular, "Regular Season" %> <br>
+				<%= check_box_tag :playoffs, "true", @is_playoffs %>
+				<%= label_tag :playoffs, "Playoffs" %>
+			</div>
+			<div class="col-md-2">
+				<span class="filter-label">Aggregation:</span>
+				<%= check_box_tag :aggregate, 1, @aggregate  %>
+				<%= label_tag :aggregate, 'Selected Seasons'  %>
+			</div>
+		</div>
+		<div class="row filter-row">
+			<div class="col-md-6">
+				<%= label_tag :category, 'Category:'  %>
+				<%= select_tag :category, options_for_select(TeamStatline.stat_categories, params[:category]), { class: 'form-control' } %>
+			</div>
+			<div class="col-md-6">
+				<%= label_tag :teams, 'Teams:'  %>
+				<%= select_tag :teams, options_for_select(Team.team_names_for_option, @team_ids), { class: 'form-control', multiple: true } %>
+			</div>
+		</div>
+		<%= submit_tag 'Filter', { class: 'filter-button btn btn-default'}%>
+	<% end -%>
+</div>

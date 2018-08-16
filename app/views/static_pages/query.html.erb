@@ -1,0 +1,6 @@
+<%= form_tag monthly_totals_path, :method => 'get' do %>
+	<%= number_field_tag :player_id %>
+	<%= number_field_tag :season_id %>
+	<%= select_month(Date.today) %>
+	<%= submit_tag 'Find Totals'%>
+<% end -%>

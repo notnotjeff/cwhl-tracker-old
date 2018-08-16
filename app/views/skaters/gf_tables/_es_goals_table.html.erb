@@ -1,0 +1,60 @@
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="rank-th">#</th>
+      <th class="name-th"><%= sort_link path, "last_name", "Name" %></th>
+      <th><%= sort_link path, "season", "Year" %></th>
+      <th><%= sort_link path, "season_age", "Age" %></th>
+      <th><%= sort_link path, "team_id", "Team" %></th>
+      <th><%= sort_link path, "games_played", "GP" %></th>
+      <th><%= sort_link path, "gf_es", "ESGF" %></th>
+      <th><%= sort_link path, "ga_es", "ESGA" %></th>
+      <th><%= sort_link path, "gf_p_es", "ESGF%" %></th>
+      <th><%= sort_link path, "gf_es_rel", "ESGF%rel" %></th>
+      <th><%= sort_link path, "gf_es_pg", "ESGF/G" %></th>
+      <th><%= sort_link path, "ga_es_pg", "ESGA/G" %></th>
+      <th><%= sort_link path, "gf_5v5", "5v5GF" %></th>
+      <th><%= sort_link path, "ga_5v5", "5v5GA" %></th>
+      <th><%= sort_link path, "gf_p_5v5", "5v5GF%" %></th>
+      <th><%= sort_link path, "gf_5v5_rel", "5v5GF%rel" %></th>
+      <th><%= sort_link path, "gf_4v4", "4v4GF" %></th>
+      <th><%= sort_link path, "ga_4v4", "4v4GA" %></th>
+      <th><%= sort_link path, "gf_p_4v4", "4v4GF%" %></th>
+      <th><%= sort_link path, "gf_3v3", "3v3GF" %></th>
+      <th><%= sort_link path, "ga_3v3", "3v3GA" %></th>
+      <th><%= sort_link path, "gf_p_3v3", "3v3GF%" %></th>
+      <th><%= sort_link path, "es_ipp", "iPP" %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% i = 1 + ((@page - 1) * 50) %>
+    <% players.each do |player| %>
+      <tr>
+        <td class="rank-tb"><%= i %></td>
+        <td class="name-tb"><%= player.is_rookie_star %><%= link_to player.full_name, player_path(player.player_profile) %></td>
+        <td><%= season == false ? player.season_abbreviation : season %></td>
+        <td><%= player.season_age %></td>
+        <td><%= player.team_abbreviation %></td>
+        <td><%= player.games_played %></td>
+        <td><%= player.gf_es %></td>
+        <td><%= player.ga_es %></td>
+        <td><%= player.gf_p_es.nil? ? "NaN%" : "#{player.gf_p_es}%" %></td>
+        <td><%= player.gf_es_rel > 0 ? "+#{player.gf_es_rel}%" : "#{player.gf_es_rel}%" %></td>
+        <td><%= player.gf_es_pg %></td>
+        <td><%= player.ga_es_pg %></td>
+        <td><%= player.gf_5v5 %></td>
+        <td><%= player.ga_5v5 %></td>
+        <td><%= player.gf_p_5v5.nil? ? "NaN%" : "#{player.gf_p_5v5}%" %></td>
+        <td><%= player.gf_5v5_rel > 0 ? "+#{player.gf_5v5_rel}%" : "#{player.gf_5v5_rel}%" %></td>
+        <td><%= player.gf_4v4 %></td>
+        <td><%= player.ga_4v4 %></td>
+        <td><%= player.gf_p_4v4.nil? ? "NaN%" : "#{player.gf_p_4v4}%" %></td>
+        <td><%= player.gf_3v3 %></td>
+        <td><%= player.ga_3v3 %></td>
+        <td><%= player.gf_p_3v3.nil? ? "NaN%" : "#{player.gf_p_3v3}%" %></td>
+        <td><%= player.es_ipp %>%</td>
+      </tr>
+      <% i += 1 %>
+    <% end -%>
+  </tbody>
+</table>

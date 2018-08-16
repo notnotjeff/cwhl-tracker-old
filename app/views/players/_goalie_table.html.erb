@@ -1,0 +1,5 @@
+<% if @goalie_report == "Shootout/Penalty Shot" %>
+  <%= render 'goalies/so_table', goalies: @statlines, path: path, season: season %>
+<% else %>
+  <%= render 'goalies/primary', goalies: @statlines, path: path, season: season %>
+<% end -%>

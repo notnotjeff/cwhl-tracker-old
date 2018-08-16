@@ -1,0 +1,23 @@
+<% provide(:title, "#{@player.full_name} Opposition Breakdown") %>
+<div class="player-info">
+	<h1>
+		<%= @player.full_name %>
+		<%= link_to "Profile", player_path(@player), {class: 'btn btn-default'} %>
+	</h1>
+</div>
+
+<%= form_tag opposition_breakdown_player_path(@player), :method => 'get' do |f| %>
+  <div class="row">
+    <div class="col-md-2">
+      <%= select_tag :team, options_for_select(@seasons_for_option, @team), { class: 'form-control' } %>
+    </div>
+    <div class="col-md-1">
+      <%= submit_tag 'Submit', { class: 'filter-button btn btn-default', id: "gb-button"} %>
+    </div>
+  </div>
+<% end %>
+
+<h3><%= @situation %></h3>
+<div class="table-scroll" id="ob-table">
+	<%= render 'opposing_team_breakdown_table' %>
+</div>

@@ -1,0 +1,61 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  city: MyString
+  abbreviation: MyString
+  division_id: 1
+  team_code: 1
+  season_id: 1
+  games_played: 1
+  wins: 1
+  losses: 1
+  ot_losses: 1
+  so_losses: 1
+  points: 1
+  points_percentage: 9.99
+  row: 1
+  goals_for: 1
+  goals_against: 1
+  ev_goals_for: 1
+  ev_goals_against: 1
+  sh_goals_for: 1
+  sh_goals_against: 1
+  pp_goals_for: 1
+  pp_goals_against: MyString
+  penalty_minutes: 1
+  shots: 1
+  first_period_shots: 1
+  second_period_shots: 1
+  third_period_shots: 1
+  ot_shots: 1
+
+two:
+  name: MyString
+  city: MyString
+  abbreviation: MyString
+  division_id: 1
+  team_code: 1
+  season_id: 1
+  games_played: 1
+  wins: 1
+  losses: 1
+  ot_losses: 1
+  so_losses: 1
+  points: 1
+  points_percentage: 9.99
+  row: 1
+  goals_for: 1
+  goals_against: 1
+  ev_goals_for: 1
+  ev_goals_against: 1
+  sh_goals_for: 1
+  sh_goals_against: 1
+  pp_goals_for: 1
+  pp_goals_against: MyString
+  penalty_minutes: 1
+  shots: 1
+  first_period_shots: 1
+  second_period_shots: 1
+  third_period_shots: 1
+  ot_shots: 1

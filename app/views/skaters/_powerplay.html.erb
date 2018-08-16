@@ -1,0 +1,5 @@
+<% if report == "On Ice Breakdown" %>
+  <%= render 'skaters/gf_tables/pp_goals_table', players: players, path: path, season: season %>
+<% else %>
+  <%= render 'skaters/scoring_tables/pp_scoring_table', players: players, path: path, season: season %>
+<% end %>

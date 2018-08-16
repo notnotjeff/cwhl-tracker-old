@@ -1,0 +1,32 @@
+<table class="table table-bordered">
+  <thead>
+    <tr>
+    	<th class="rank-th">#</th>
+      <th class="name-th"><%= sort_link path, "city", "Name" %></th>
+      <th><%= sort_link path, "season_id", "Year" %></th>
+      <th><%= sort_link path, "games_played", "GP" %></th>
+      <th><%= sort_link path, "so_wins", "SOW" %></th>
+      <th><%= sort_link path, "so_losses", "SOL" %></th>
+      <th><%= sort_link path, "shootout_attempts", "ATT" %></th>
+      <th><%= sort_link path, "shootout_goals", "G" %></th>
+      <th><%= sort_link path, "shootout_percent", "SO%" %></th>
+    </tr>
+  </thead>
+	<tbody>
+		<% i = 1 + ((@page - 1) * 50) %>
+		<% teams.each do |team| %>
+			<tr>
+				<td class="rank-tb"><%= i %></td>
+				<td class="name-tb"><%= link_to team.full_name, team_path(team.team_id) %></td>
+				<td><%= season == false ? team.season : season %></td>
+				<td><%= team.games_played %></td>
+				<td><%= team.so_wins %></td>
+				<td><%= team.so_losses %></td>
+				<td><%= team.shootout_attempts %></td>
+				<td><%= team.shootout_goals %></td>
+				<td><%= team.shootout_percent == nil ? "NaN" : "#{team.shootout_percent}%" %></td>
+			</tr>
+			<% i += 1 %>
+		<% end -%>
+	</tbody>
+</table>

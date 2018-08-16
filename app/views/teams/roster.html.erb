@@ -1,0 +1,92 @@
+<% provide(:title, "#{@team.full_name} Roster") %>
+
+<div class="row">
+		<div class="col-md-1"><%= image_tag("logos/#{@team.logo_url}", width: '64', height: '64', class: "team-logo") %></div>
+		<div class="col-md-11">
+			<h1><%= @team.full_name %> Roster <%= link_to "Profile", team_path(@team), {class: 'btn btn-default'} %></h1>
+		</div>
+</div>
+<br>
+
+<div class="game-by-game-form">
+	<%= form_tag roster_team_path(@team), :method => 'get' do %>
+		<div class="row">
+			<div class="col-md-1"><%= select_tag :season, options_for_select(@seasons_for_option, @season), { class: 'form-control' } %></div>
+			<div class="col-md-1"><%= submit_tag 'Select', { class: 'year-filter-button btn btn-default'} %></div>
+		</div>
+	<% end -%>
+</div>
+
+<div class="heading">
+  <h2>Skaters</h2>
+</div>
+
+<div class="table-scroll">
+	<table class="table table-bordered">
+	  <thead>
+	    <tr>
+				<th class="rank-th">#</th>
+	      <th class="name-th">Name</th>
+	      <th>GP</th>
+	      <th>POS</th>
+	      <th>Shoots</th>
+	      <th>Season Age</th>
+	      <th>Birthdate</th>
+	      <th>Height</th>
+	      <th>Weight</th>
+	    </tr>
+	  </thead>
+		<tbody>
+			<% @skaters.each do |skater| %>
+				<tr>
+					<td class="rank-tb"><%= skater.number %></td>
+					<td class="name-tb"><%= link_to skater.full_name, player_path(skater.player) %></td>
+					<td><%= skater.games_played %></td>
+					<td><%= skater.position %></td>
+					<td><%= skater.shoots %></td>
+					<td><%= skater.season_age %></td>
+					<td><%= skater.player.birthdate %></td>
+					<td><%= skater.player.height %></td>
+					<td><%= skater.player.weight %></td>
+				</tr>
+			<% end -%>
+		</tbody>
+	</table>
+</div>
+
+<div class="heading">
+  <h2>Goalies</h2>
+</div>
+
+<div class="table-scroll">
+	<table class="table table-bordered">
+	  <thead>
+	    <tr>
+				<th>#</th>
+	      <th>Name</th>
+	      <th>GP</th>
+	      <th>POS</th>
+	      <th>Shoots</th>
+	      <th>Season Age</th>
+	      <th>Birthdate</th>
+	      <th>Height</th>
+	      <th>Weight</th>
+	    </tr>
+	  </thead>
+		<tbody>
+			<% @goalies.each do |goalie| %>
+				<tr>
+					<td><%= goalie.number %></td>
+					<td><%= link_to goalie.full_name, player_path(goalie.player) %></td>
+					<td><%= goalie.games_played %></td>
+					<td><%= goalie.position %></td>
+					<td><%= goalie.shoots %></td>
+					<td><%= goalie.season_age %></td>
+					<td><%= goalie.player.birthdate %></td>
+					<td><%= goalie.player.height %></td>
+					<td><%= goalie.player.weight %></td>
+				</tr>
+			<% end -%>
+		</tbody>
+	</table>
+</div>

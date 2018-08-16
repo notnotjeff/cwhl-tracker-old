@@ -1,0 +1,34 @@
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="rank-th">#</th>
+      <th class="name-th"><%= sort_link path, "last_name", "Name" %></th>
+      <th><%= sort_link path, "season_age", "Age" %></th>
+      <th><%= sort_link path, "shoots", "H" %></th>
+      <th><%= sort_link path, "team_id", "Team" %></th>
+      <th><%= sort_link path, "position", "POS" %></th>
+      <th><%= sort_link path, "games_played", "GP" %></th>
+      <th><%= sort_link path, "ps_taken", "ATT" %></th>
+      <th><%= sort_link path, "ps_goals", "G" %></th>
+      <th><%= sort_link path, "ps_percent", "PS%" %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% i = 1 + ((@page - 1) * 50) %>
+    <% players.each do |player| %>
+      <tr>
+        <td class="rank-tb"><%= i %></td>
+        <td class="name-tb"><%= player.is_rookie_star %><%= link_to player.full_name, player_path(player.player_profile) %></td>
+        <td><%= player.season_age %></td>
+        <td><%= player.shoots %></td>
+        <td><%= player.team_abbreviation %></td>
+        <td><%= player.position %></td>
+        <td><%= player.games_played %></td>
+        <td><%= player.ps_taken %></td>
+        <td><%= player.ps_goals %></td>
+        <td><%= player.ps_percent != nil ? "#{player.ps_percent}%" : "NaN%" %></td>
+      </tr>
+      <% i += 1 %>
+    <% end -%>
+  </tbody>
+</table>

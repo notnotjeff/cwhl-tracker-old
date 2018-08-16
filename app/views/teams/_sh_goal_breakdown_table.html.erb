@@ -1,0 +1,34 @@
+<table class="table table-bordered">
+	  <thead>
+	    <tr>
+	    	<th class="rank-th">#</th>
+				<th class="name-th"><%= sort_link path, "city", "Name" %></th>
+      	<th><%= sort_link path, "season_id", "Year" %></th>
+	      <th><%= sort_link path, "games_played", "GP" %></th>
+	      <th><%= sort_link path, "gf_4v5", "4v5GF" %></th>
+	      <th><%= sort_link path, "ga_4v5", "4v5GA" %></th>
+	      <th><%= sort_link path, "gf_3v5", "3v5GF" %></th>
+	      <th><%= sort_link path, "ga_3v5", "3v5GA" %></th>
+	      <th><%= sort_link path, "gf_3v4", "3v4GF" %></th>
+	      <th><%= sort_link path, "ga_3v4", "3v4GA" %></th>
+	    </tr>
+	  </thead>
+	<tbody>
+		<% i = 1 + ((@page - 1) * 50) %>
+		<% teams.each do |team| %>
+			<tr>
+				<td class="rank-tb"><%= i %></td>
+				<td class="name-tb"><%= link_to team.full_name, team_path(team.team_id) %></td>
+				<td><%= season == false ? team.season : season %></td>
+				<td><%= team.games_played %></td>
+				<td><%= team.gf_4v5 %></td>
+				<td><%= team.ga_4v5 %></td>
+				<td><%= team.gf_3v5 %></td>
+				<td><%= team.ga_3v5 %></td>
+				<td><%= team.gf_3v4 %></td>
+				<td><%= team.ga_3v4 %></td>
+			</tr>
+		<% i += 1 %>
+		<% end -%>
+	</tbody>
+</table>

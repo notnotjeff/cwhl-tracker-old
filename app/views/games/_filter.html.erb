@@ -1,0 +1,30 @@
+<div class="filter-container">
+	<%= form_tag games_path, :method => 'get' do %>
+		<div class="row filter-row">
+			<div class="col-md-8">
+				<%= label_tag :seasons, 'Seasons:'  %>
+				<%= select_tag :seasons, options_for_select(Season.years_for_option, @seasons), { class: 'form-control', multiple: true } %>
+			</div>
+			<div class="col-md-2">
+				<%= label_tag 'result', 'Result:'  %>
+				<%= select_tag :result, options_for_select(Game.results_for_option, @result), { class: 'form-control' } %>
+			</div>
+			<div class="col-md-2">
+				<%= label_tag :goals_scored, 'Goals Scored:'  %>
+				<%= number_field_tag :goals_scored, @goals_scored, { min: 0, class: 'form-control' } %>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-8">
+				<%= label_tag :teams, 'Teams:'  %>
+				<%= select_tag :teams, options_for_select(Team.team_names_for_option, @team_ids), { class: 'form-control', multiple: true } %>
+			</div>
+			<div class="col-md-2">
+				<span class="filter-label">Team Options:</span>
+				<%= check_box_tag :only_selected, true, @only_selected  %>
+				<%= label_tag :only_selected, 'Only Selected'  %>
+			</div>
+		</div>
+		<%= submit_tag 'Filter', { class: 'filter-button btn btn-default'}%>
+	<% end -%>
+</div>

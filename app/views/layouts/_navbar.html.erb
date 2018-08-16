@@ -1,0 +1,52 @@
+<header class="header">
+  <nav class="nav-container">
+    <input type="checkbox" id="mobile-menu" class="mobile-menu-check">
+    <label class="show-mobile-menu" for="mobile-menu">
+      <i class="fa fa-bars"></i>
+    </label>
+    <%= link_to root_path, {class: "mobile-logo"} do %>
+      <svg id="mobile-logo" width="45px" height="45px" viewBox="0 0 101 101" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <g id="mobile-Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="mobile-Group-3" transform="translate(5.000000, 5.000000)">
+                <text id="mobile-CWHL" fill="#FFFFFF" font-family="Silom" font-size="24" font-weight="bold" line-spacing="16">
+                    <tspan x="12" y="43">CWHL</tspan>
+                </text>
+                <text id="mobile-Tracker" fill="#FFFFFF" font-family="Silom" font-size="16" font-weight="bold" line-spacing="16">
+                    <tspan x="13" y="62">Tracker</tspan>
+                </text>
+            </g>
+          </g>
+      </svg>
+    <% end -%>
+    <div class="nav-links">
+      <%= link_to root_path, {class: "header-logo"} do %>
+        <svg id="logo" width="45px" height="45px" viewBox="0 0 101 101" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+              <g id="Group-3" transform="translate(5.000000, 5.000000)">
+                  <text id="CWHL" fill="#FFFFFF" font-family="Silom" font-size="24" font-weight="bold" line-spacing="16">
+                      <tspan x="15" y="43">CWHL</tspan>
+                  </text>
+                  <text id="Tracker" fill="#FFFFFF" font-family="Silom" font-size="16" font-weight="bold" line-spacing="16">
+                      <tspan x="13" y="62">Tracker</tspan>
+                  </text>
+              </g>
+            </g>
+        </svg>
+      <% end -%>
+
+      <%= link_to 'Games', games_path, { class: 'nav-link' } %>
+      <%= link_to 'Skaters', skaters_path, { class: 'nav-link' } %>
+      <%= link_to 'Goalies', goalies_path, { class: 'nav-link' } %>
+      <%= link_to 'Teams', teams_path, { class: 'nav-link' } %>
+      <%= link_to 'About', about_path, { class: 'nav-link' } %>
+    </div>
+
+    <%= form_tag search_path, class: 'nav-form', :method => 'get'  do %>
+      <%= text_field_tag 'search_bar', params[:search_bar], { class: 'nav-search' }  %>
+  		<%= button_tag type: "submit", class: 'search-button' do %>
+        <i class="fa fa-search"></i>
+      <% end %>
+    <% end %>
+
+  </nav>
+</header>

@@ -1,0 +1,48 @@
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Situation</th>
+      <th>GF</th>
+      <th>GA</th>
+      <th>GF%</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>All Situations</td>
+      <td><%= @gf.count %></td>
+      <td><%= @ga.count %></td>
+      <td><%= (@gf.count / BigDecimal.new(@gf.count + @ga.count)).round(4) * 100 %>%</td>
+    </tr>
+    <tr>
+      <td>Even Strength</td>
+      <td><%= @ev_gf %></td>
+      <td><%= @ev_ga %></td>
+      <td><%= (@ev_gf / BigDecimal.new(@ev_ga + @ev_gf)).round(4) * 100 %>%</td>
+    </tr>
+    <tr>
+      <td>Powerplay</td>
+      <td><%= @pp_gf %></td>
+      <td><%= @pp_ga %></td>
+      <td><%= (@pp_gf / BigDecimal.new(@pp_ga + @pp_gf)).round(4) * 100 %>%</td>
+    </tr>
+    <tr>
+      <td>Shorthanded</td>
+      <td><%= @sh_gf %></td>
+      <td><%= @sh_ga %></td>
+      <td><%= (@sh_gf / BigDecimal.new(@sh_ga + @sh_gf)).round(4) * 100 %>%</td>
+    </tr>
+    <tr>
+      <td>Empty Net For</td>
+      <td><%= @en_f_gf %></td>
+      <td><%= @en_f_ga %></td>
+      <td><%= (@en_f_gf / BigDecimal.new(@en_f_ga + @en_f_gf)).round(4) * 100 %>%</td>
+    </tr>
+    <tr>
+      <td>Empty Net Against</td>
+      <td><%= @en_a_gf %></td>
+      <td><%= @en_a_ga %></td>
+      <td><%= (@en_a_gf / BigDecimal.new(@en_a_ga + @en_a_gf)).round(4) * 100 %>%</td>
+    </tr>
+  </tbody>
+</table>

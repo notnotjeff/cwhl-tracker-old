@@ -1,0 +1,50 @@
+<% provide(:title, @team.full_name) %>
+
+<div class="row team-profile-heading">
+	<div class="col-md-1">
+		<%= image_tag("logos/#{@team.logo_url}", width: '64', height: '64', class: "team-logo") %>
+	</div>
+	<div class="col-md-10">
+		<h1>
+			<%= @team.full_name %>
+			<span class="team-links"><%= link_to "Team Roster", roster_team_path(@team), {class: 'btn btn-default team-show-btn'} %>
+			<%= link_to "Penalty Breakdown", penalties_team_path(@team), {class: 'btn btn-default team-show-btn'} %></span>
+		</h1>
+	</div>
+</div>
+
+<h2>Franchise Statistics</h2>
+<%= form_tag team_path(@team), :method => 'get' do %>
+	<div class="row filter-row">
+		<div class="col-md-4">
+			<%= select_tag :category, options_for_select(TeamStatline.stat_categories, params[:category]), { class: 'form-control' } %>
+		</div>
+		<div class="col-md-2">
+			<%= check_box_tag :regular, "true", @is_regular %>
+			<%= label_tag :regular, "Regular Season" %> <br>
+			<%= check_box_tag :playoffs, "true", @is_playoffs %>
+			<%= label_tag :playoffs, "Playoffs" %>
+		</div>
+		<div class="col-md-2">
+			<%= submit_tag 'Filter', { class: 'filter-button btn btn-default', id: 'team-profile-filter'}%>
+		</div>
+	</div>
+<% end %>
+
+<div class="table-scroll" id="team-profile">
+	<%= render 'team_profile_table', path: "team", season: false %>
+</div>
+
+<h2>Game Breakdown</h2>
+<div class="game-by-game-form">
+	<%= form_tag team_path(@team), :method => 'get' do %>
+		<div class="row">
+			<div class="col-md-1"><%= select_tag :season, options_for_select(@team.seasons_for_option, @games_season), { class: 'form-control' } %></div>
+			<div class="col-md-1"><%= submit_tag 'Select', { class: 'year-filter-button btn btn-default'} %></div>
+		</div>
+	<% end -%>
+</div>
+
+<div class="table-scroll" id="team-game-breakdown">
+	<%= render 'team_game_breakdown_table', path: "team_games" %>
+</div>

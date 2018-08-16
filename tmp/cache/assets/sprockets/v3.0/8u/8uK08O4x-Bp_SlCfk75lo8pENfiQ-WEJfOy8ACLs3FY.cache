@@ -1,0 +1,13 @@
+I"¸(function() {
+  $(document).on('turbolinks:load', function() {
+    var active_column;
+    $('#goalies-table .active-link').closest('th').attr('id', 'active-th');
+    active_column = $('#goalies-table .active-link').closest('th').index() + 1;
+    $('#goalies-table table tbody td:nth-child(' + active_column + ')').addClass('active-tcol');
+    return $("#goalie_select").selectize({
+      minimumInputLength: 2
+    });
+  });
+
+}).call(this);
+:ET

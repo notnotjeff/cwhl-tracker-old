@@ -1,0 +1,47 @@
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="month-th">Month</th>
+      <th>GP</th>
+      <th>G</th>
+      <th>A1</th>
+      <th>A2</th>
+      <th>P</th>
+      <th>G/G</th>
+      <th>A1/G</th>
+      <th>A2/G</th>
+      <th>P/G</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @months.each do |month, stats| %>
+      <% if stats.games_played == 0 %>
+        <tr>
+          <td class="month-tb"><%= month %></td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+        </tr>
+      <% else %>
+        <tr>
+          <td class="month-tb"><%= month %></td>
+          <td><%= stats.games_played %></td>
+          <td><%= stats.goals || 0 %></td>
+          <td><%= stats.a1 || 0 %></td>
+          <td><%= stats.a2 || 0 %></td>
+          <td><%= stats.points || 0 %></td>
+          <td><%= stats.goals_pg || 0.0 %></td>
+          <td><%= stats.a1_pg || 0.0 %></td>
+          <td><%= stats.a2_pg || 0.0 %></td>
+          <td><%= stats.points_pg || 0.0 %></td>
+        </tr>
+      <% end %>
+    <% end -%>
+  </tbody>
+</table>

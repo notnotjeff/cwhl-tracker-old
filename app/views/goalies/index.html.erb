@@ -1,0 +1,35 @@
+<% provide(:title, "Goalies") %>
+
+<div class="heading">
+	<h1>Goalies</h1>
+</div>
+<%= render 'filter', checked: @rookie %>
+
+<div class="row desc-heading">
+  <div class="col-md-6">
+  	<span class="table-category"><%= @goalie_report %></span>
+  	<span>
+  		<%= link_to "CSV".html_safe, goalies_path(page: params[:page], games_played: params[:games_played], shots_against: params[:shots_against], position: params[:position], high_age_range: params[:high_age_range], team: params[:team], rookie: params[:rookie], name: params[:name], situation: params[:situation], season_start: params[:season_start], season_end: params[:season_end], is_regular: params[:is_regular], is_playoffs: params[:is_playoffs], format: "csv"), { class: "btn btn-success btn-sm btn-csv" } %>
+  	</span>
+  </div>
+</div>
+
+<div class="table-scroll table-responsive" id="goalies-table">
+	<%= render 'goalies_table', path: "goalies" %>
+</div>
+
+<div id="paginate">
+	<%= render 'paginate' %>
+</div>
+
+<div id="show-legend">
+  <span>[+] Show Legend</span>
+</div>
+
+<div id="legend" class="table-legend">
+	<% if @goalie_report == "Shootout/Penalty Shot" %>
+		<%= render 'goalies/legend/so_legend' %>
+	<% else %>
+		<%= render 'goalies/legend/primary_legend' %>
+	<% end -%>
+</div>

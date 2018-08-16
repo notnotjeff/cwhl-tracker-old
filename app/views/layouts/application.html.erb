@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= full_title(yield(:title)) %></title>
+    <%= favicon_link_tag %>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="CWHL Tracker is a one stop website for your CWHL statistical needs.  We provide advanced filtering, rate stats, situational goal breakdowns and more!  AHL Tracker is truly the best way to consume advanced AHL stats.">
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+  </head>
+
+  <body>
+	  <div class="site-container">
+
+	  	<%= render 'layouts/navbar' %>
+
+	  	<div class="content-container">
+	  		<%= yield %>
+	  	</div>
+
+	  	<footer class="footer">
+	  		CWHL Tracker &copy; Jeff Craig 2018
+	  	</footer>
+    </div>
+  </body>
+</html>

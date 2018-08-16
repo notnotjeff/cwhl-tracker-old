@@ -1,0 +1,6 @@
+$("#skaters-table").html('<%= escape_javascript(render("skaters_table", path: "skaters")) %>');
+$("#paginate").html('<%= escape_javascript(render("paginate")) %>');
+
+$('#skaters-table .active-link').closest('th').attr('id', 'active-th');
+active_column = $('#skaters-table .active-link').closest('th').index() + 1;
+$('#skaters-table table tbody td:nth-child(' + active_column + ')').addClass('active-tcol');

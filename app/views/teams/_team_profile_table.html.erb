@@ -1,0 +1,19 @@
+<% if @category == "Shot Stats" %>
+  <%= render 'shot_stats_table', teams: @seasons, path: path, season: @season %>
+<% elsif @category == "Goal Stats" %>
+  <%= render 'goal_stats_table', teams: @seasons, path: path, season: @season %>
+<% elsif @category == "Shootout Stats" %>
+  <%= render 'shootout_stats_table', teams: @seasons, path: path, season: @season %>
+<% elsif @category == "Period Breakdown" %>
+  <%= render 'period_breakdown_table', teams: @seasons, path: path, season: @season %>
+<% elsif @category == "Even Strength Goal Breakdown" %>
+  <%= render 'ev_goal_breakdown_table', teams: @seasons, path: path, season: @season %>
+<% elsif @category == "Powerplay Goal Breakdown" %>
+  <%= render 'pp_goal_breakdown_table', teams: @seasons, path: path, season: @season %>
+<% elsif @category == "Shorthanded Goal Breakdown" %>
+  <%= render 'sh_goal_breakdown_table', teams: @seasons, path: path, season: @season %>
+<% elsif @category == "Empty Net Goal Breakdown" %>
+  <%= render 'en_goal_breakdown_table', teams: @seasons, path: path, season: @season %>
+<% else @category == "Game Stats" %>
+  <%= render 'game_stats_table', teams: @seasons, path: path, season: @season %>
+<% end %>

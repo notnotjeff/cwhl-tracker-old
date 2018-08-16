@@ -1,0 +1,56 @@
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="rank-th">#</th>
+      <th class="name-th"><%= sort_link path, "last_name", "Name" %></th>
+      <th><%= sort_link path, "season_id", "Year" %></th>
+      <th><%= sort_link path, "season_age", "Age" %></th>
+      <th><%= sort_link path, "position", "POS" %></th>
+      <th><%= sort_link path, "team_id", "Team" %></th>
+      <th><%= sort_link path, "games_played", "GP" %></th>
+      <th><%= sort_link path, "penalty_minutes", "PIM" %></th>
+      <th><%= sort_link path, "penalty_minutes_pg", "PIM/G" %></th>
+      <th><%= sort_link path, "minors", "MIN" %></th>
+      <th><%= sort_link path, "minors_pg", "MIN/G" %></th>
+      <th><%= sort_link path, "double_minors", "DBL" %></th>
+      <th><%= sort_link path, "double_minors_pg", "DBL/G" %></th>
+      <th><%= sort_link path, "majors", "MAJ" %></th>
+      <th><%= sort_link path, "majors_pg", "MAJ/G" %></th>
+      <th><%= sort_link path, "fights", "FIGHT" %></th>
+      <th><%= sort_link path, "fights_pg", "FIGHT/G" %></th>
+      <th><%= sort_link path, "misconducts", "MISC" %></th>
+      <th><%= sort_link path, "misconducts_pg", "MISC/G" %></th>
+      <th><%= sort_link path, "game_misconducts", "gMISC" %></th>
+      <th><%= sort_link path, "game_misconducts_pg", "gMISC/G" %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% i = 1 + ((@page - 1) * 50) %>
+    <% players.each do |player| %>
+      <tr>
+        <td class="rank-tb"><%= i %></td>
+        <td class="name-tb"><%= player.is_rookie_star %><%= link_to player.full_name, player_path(player.player_profile) %></td>
+        <td><%= season == false ? player.season_abbreviation : season %></td>
+        <td><%= player.season_age %></td>
+        <td><%= player.position %></td>
+        <td><%= player.team_abbreviation %></td>
+        <td><%= player.games_played %></td>
+        <td><%= player.penalty_minutes %></td>
+        <td><%= player.penalty_minutes_pg %></td>
+        <td><%= player.minors %></td>
+        <td><%= player.minors_pg %></td>
+        <td><%= player.double_minors %></td>
+        <td><%= player.double_minors_pg %></td>
+        <td><%= player.majors %></td>
+        <td><%= player.majors_pg %></td>
+        <td><%= player.fights %></td>
+        <td><%= player.fights_pg %></td>
+        <td><%= player.misconducts %></td>
+        <td><%= player.misconducts_pg %></td>
+        <td><%= player.game_misconducts %></td>
+        <td><%= player.game_misconducts_pg %></td>
+      </tr>
+      <% i += 1 %>
+    <% end -%>
+  </tbody>
+</table>

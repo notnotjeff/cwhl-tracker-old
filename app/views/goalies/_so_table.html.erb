@@ -1,0 +1,34 @@
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="rank-th">#</th>
+      <th class="name-th"><%= sort_link path, "last_name", "Name" %></th>
+      <th><%= sort_link path, "season_id", "Year" %></th>
+      <th><%= sort_link path, "season_age", "Age" %></th>
+      <th><%= sort_link path, "team_id", "Team" %></th>
+      <th><%= sort_link path, "penalty_shot_attempts", "PS-SA" %></th>
+      <th><%= sort_link path, "penalty_shot_goals_against", "PS-GA" %></th>
+      <th><%= sort_link path, "shootout_attempts", "SO-SA" %></th>
+      <th><%= sort_link path, "shootout_goals_against", "SO-GA" %></th>
+      <th><%= sort_link path, "shootout_percent", "SO-SV%" %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% i = 1 + ((@page - 1) * 50) %>
+    <% goalies.each do |goalie| %>
+      <tr>
+        <td class="rank-tb"><%= i %></td>
+        <td class="name-tb"><%= goalie.is_rookie_star %><%= link_to goalie.full_name, player_path(goalie.player_profile) %></td>
+        <td><%= season == false ? goalie.season_abbreviation : season %></td>
+        <td><%= goalie.season_age %></td>
+        <td><%= goalie.team_abbreviation %></td>
+        <td><%= goalie.penalty_shot_attempts %></td>
+        <td><%= goalie.penalty_shot_goals_against %></td>
+        <td><%= goalie.shootout_attempts %></td>
+        <td><%= goalie.shootout_goals_against %></td>
+        <td><%= goalie.shootout_percent %></td>
+      </tr>
+      <% i += 1 %>
+    <% end -%>
+  </tbody>
+</table>

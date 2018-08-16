@@ -1,0 +1,17 @@
+I"Ð(function() {
+  $(document).on('turbolinks:load', function() {
+    var legend, show_legend;
+    show_legend = $("#show-legend");
+    legend = $("#legend");
+    return show_legend.on('click', function() {
+      legend.toggle();
+      if (show_legend.text() === '[-] Hide Legend') {
+        return show_legend.html('<span>[+] Show Legend</span>');
+      } else {
+        return show_legend.html('<span>[-] Hide Legend</span>');
+      }
+    });
+  });
+
+}).call(this);
+:ET

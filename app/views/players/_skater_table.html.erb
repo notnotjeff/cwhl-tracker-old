@@ -1,0 +1,17 @@
+<% if @report == "Penalty Breakdown" %>
+  <%= render 'skaters/penalty_breakdown', players: @statlines, report: @report, path: path, season: season %>
+<% elsif @situation == "Powerplay" %>
+  <%= render 'skaters/powerplay', players: @statlines, report: @report, path: path, season: season %>
+<% elsif @situation == "Shorthanded" %>
+  <%= render 'skaters/shorthanded', players: @statlines, report: @report, path: path, season: season %>
+<% elsif @situation == "Even Strength" %>
+  <%= render 'skaters/even_strength', players: @statlines, report: @report, path: path, season: season %>
+<% elsif @situation == 'Shootout' %>
+  <%= render 'skaters/shootout_scoring_table', players: @statlines, path: path, season: season %>
+<% elsif @situation == 'Penalty Shot' %>
+  <%= render 'skaters/ps_scoring_table', players: @statlines, path: path, season: season %>
+<% elsif @situation == 'Empty Net' %>
+  <%= render 'skaters/empty_net', players: @statlines, report: @report, path: path, season: season %>
+<% else %>
+  <%= render 'skaters/all_situations', players: @statlines, report: @report, path: path, season: season %>
+<% end -%>

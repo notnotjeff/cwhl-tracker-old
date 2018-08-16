@@ -1,0 +1,742 @@
+/* Jeff Craig Designs: */
+
+/* START RESET */
+ html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center, dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend, table, caption,
+tbody, tfoot, thead, tr, th, td, article, aside,
+canvas, details, embed, figure, figcaption, footer,
+header, hgroup, menu, nav, output, ruby, section,
+summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+  font-family: Arial;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+strong, b {
+  font-weight: bold;
+}
+em, i {
+  font-style: italic;
+}
+a img {
+  border: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+/* END RESET */
+
+/* Colour Variables */
+$blue: #0a54cc;
+$tomato: #ff6347;
+$grey: #e6e6e6;
+$dark-grey: #D1CDCD;
+$t-heading-color: #0e3370;
+
+/* GLOBAL STYLES */
+h1, h2, h3, h4, h5 {
+  font-weight: bold;
+  margin: 15px 0;
+}
+
+h1 {
+  font-size: 2.1em;
+}
+
+h2 {
+  font-size: 1.9em;
+}
+
+h3 {
+  font-size: 1.7em;
+}
+
+h4 {
+  font-size: 1.5em;
+}
+
+h5 {
+  font-size: 1em;
+}
+
+.site-container {
+
+  li {
+    list-style: none;
+  }
+}
+
+.heading {
+  margin-bottom: 20px;
+}
+
+.desc-heading {
+  margin-top: 20px;
+}
+
+.filter-row {
+  margin-bottom: 15px;
+}
+
+.filter-button {
+  margin-top: 15px;
+}
+
+.filter-handle {
+  width: 2.5em !important;
+  height: 2em !important;
+  margin-top: -2%;
+  text-align: center;
+  line-height: 2em;
+}
+
+.filter-label {
+  padding-bottom: 4px;
+  display: block;
+}
+
+.content-container {
+  padding-top: 25px;
+}
+
+.chosen-container {
+  margin: 10px 0;
+}
+
+.chosen-choices {
+  border-radius: 5px;
+  border: 1px solid #ccc !important;
+  box-shadow: none;
+  padding: 3px !important;
+}
+
+.search-field {
+  padding-left: 5px !important;
+  input {
+    color: #555555 !important;
+    font-size: 14px !important;
+    font-family: inherit !important;
+  }
+}
+
+.search-choice {
+  background-color: $blue !important;
+  background-image: none !important;
+  border: 1px solid teal !important;
+
+  span {
+    color: white !important;
+  }
+
+  a {
+
+  }
+}
+
+/* NAV STYLES */
+
+.mobile-logo {
+  display: none;
+  color: white;
+}
+
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: $blue;
+  font-family: Silom;
+  padding: 5px 0;
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+  }
+
+  .header-logo {
+    padding: 0 10px;
+  }
+
+  .nav-link {
+    padding: 0 20px;
+    font-size: 22px;
+  }
+
+  a, a:hover, a:visited {
+    color: white;
+  }
+
+  .nav-form {
+    display: flex;
+    align-items: center;
+    margin-right: 25px;
+
+    input {
+      box-sizing: border-box;
+      font-family: Arial;
+      height: 35px;
+      width: 200px;
+      padding: 8px 8px;
+      margin: 0;
+      border: 0;
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    .search-button {
+      box-sizing: border-box;
+      height: 35px;
+      background-color: white;
+      color: black;
+      border: 0;
+      margin: 0;
+      padding: 0 10px;
+    }
+  }
+}
+
+/* MOBILE MENU */
+.mobile-menu-check,
+.show-mobile-menu {
+  display: none;
+  float: right;
+  color: white;
+}
+
+.nav-links a,
+.drop-trigger,
+.show-mobile-menu {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+/* FOOTER STYLES */
+
+.footer {
+  margin: 20px 0px 20px 0px;
+  text-align: center;
+  font-size: 0.7em;
+}
+
+/* FILTER STYLES */
+
+.filter-container {
+  background: $grey;
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  form {
+    width: 90%;
+  }
+}
+
+.form-control {
+  margin-top: 10px;
+}
+
+.slider {
+  margin-top: 20px;
+}
+
+/* CONTENT STYLES */
+
+.content-container {
+  margin: 0% 5%;
+}
+
+/* TABLE STYLES */
+
+$cell-size: 70px;
+$name-width: 220px;
+$rank-width: 50px;
+$month-width: 50px;
+$top-heading-index: 25;
+$side-heading-index: 20;
+
+.table-category {
+  font-weight: 800;
+  font-size: 1.5em;
+}
+
+.y-scroll {
+  overflow-x: scroll;
+}
+
+// No Sticky
+.enable-table-scroll {
+  overflow: scroll;
+  width: 100%;
+  max-height: 60vh;
+  margin-top: 15px;
+
+  tbody tr:nth-child(even) td:nth-child(1),
+  tbody tr:nth-child(even) td:nth-child(2) {
+    background-color: $dark-grey;
+  }
+
+  tbody tr:nth-child(odd) td:nth-child(1),
+  tbody tr:nth-child(odd) td:nth-child(2) {
+    background-color: $grey;
+  }
+}
+
+.month-th, .month-tb {
+  position: sticky;
+  min-width: $month-width;
+  left: 0px;
+  background-color: $blue; // Specificity will prevent month-tb from being blue as well!
+  z-index: $top-heading-index;
+}
+
+// Scroll With Sticky
+.table-scroll {
+  overflow: scroll;
+  width: 100%;
+  max-height: 60vh;
+  margin-top: 15px;
+
+  ul {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 0px;
+  }
+
+  .pagination {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 0px;
+  }
+
+  .rank-th, .rank-tb {
+    min-width: $rank-width;
+    left: 0px;
+    background-color: $blue;
+    z-index: $top-heading-index;
+  }
+  .name-th, .name-tb {
+    min-width: $name-width;
+    left: $rank-width;
+    background-color: $blue;
+    z-index: $top-heading-index;
+  }
+  .year-th, .year-tb {
+    min-width: $cell-size;
+    left: $name-width !important;
+    background-color: $blue;
+    z-index: $top-heading-index;
+  }
+
+  .year-main-th, .year-main-tb {
+    min-width: $cell-size;
+    left: $rank-width !important;
+    background-color: $blue;
+    z-index: $top-heading-index;
+  }
+
+  .pull-th-left {
+    left: 0px;
+  }
+
+  .rank-tb, .name-tb, .year-tb, .year-main-tb {
+    z-index: $side-heading-index !important;
+  }
+
+  tbody tr:nth-child(even) td:nth-child(1),
+  tbody tr:nth-child(even) td:nth-child(2) {
+    background-color: $dark-grey;
+  }
+
+  tbody tr:nth-child(odd) td:nth-child(1),
+  tbody tr:nth-child(odd) td:nth-child(2) {
+    background-color: $grey;
+  }
+}
+
+.table {
+  tr:nth-child(even) {
+    background-color: $dark-grey;
+  }
+  tr:nth-child(odd) {
+    background-color: $grey;
+  }
+  margin-top: 10px;
+  font-size: 0.8em;
+  th {
+    padding: 8px;
+    background-color: $blue;
+    color: white;
+    a, a:visited, a:hover, a:active {
+      color: white;
+      text-decoration: none;
+    }
+  }
+  td {
+    padding: 5px 8px;
+    a, a:visited, a:hover, a:active {
+      color: black;
+      text-decoration: none;
+    }
+    font-size: 1em;
+  }
+
+  td, th {
+    min-width: $cell-size;
+    box-sizing: border-box;
+  }
+  .regular {
+    min-width: calc($cell-size + 20px);
+  }
+}
+
+.table-scroll tbody tr td:nth-child(1),
+.table-scroll tbody tr td:nth-child(2) {
+  position: -webkit-sticky;
+  position: sticky;
+  left: 0px;
+}
+
+.table-scroll tbody tr td:nth-child(2) {
+  position: -webkit-sticky;
+  position: sticky;
+  left: 50px;
+}
+
+.table-scroll table th {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0px;
+  z-index: 10;
+}
+
+table, table th, table td, table tr {
+  border: none !important;
+  border-collapse: collapse;
+}
+
+.player-game-breakdown,
+.player-penalty-breakdown {
+  max-height: 40vh;
+}
+
+#active-th {
+  background-color: $t-heading-color;
+}
+
+table tbody tr .active-tcol {
+  background-color: #c5e8f2 !important;
+}
+
+#show-legend {
+  margin-top: 20px;
+  span {
+    cursor: pointer;
+  }
+}
+
+.table-legend {
+  display: none;
+  line-height: 1.4;
+  margin-top: 20px;
+  span {
+    font-weight: 700;
+  }
+}
+
+.btn-csv {
+  margin-top: -10px;
+}
+
+.glyphicon.glyphicon-chevron-down, .glyphicon.glyphicon-chevron-up {
+  font-size:0.3em;
+}
+
+/* GAME STYLES */
+
+.game-banner {
+  margin-bottom: 35px;
+}
+
+/* ABOUT STYLES */
+
+.about-container {
+  margin-top: 20px;
+}
+
+/* PLAYER PAGE QUERIES */
+
+.player-info {
+  margin-bottom: 50px;
+}
+
+.year-filter-button {
+  margin-top: 10px;
+}
+
+/* MEDIA QUERIES */
+
+@media screen and (max-width: 1400px) {
+  $cell-size: 60px;
+  $name-width: 120px;
+  $rank-width: 20px;
+  $top-heading-index: 25;
+  $side-heading-index: 20;
+  $table-font-size: 0.9em;
+
+  .table-scroll {
+    font-size: $table-font-size;
+    th {
+      font-size: $table-font-size;
+    }
+
+    .rank-th, .rank-tb {
+      min-width: $rank-width;
+      left: 0px;
+      background-color: $blue;
+      z-index: $top-heading-index;
+    }
+    .name-th, .name-tb {
+      min-width: $name-width;
+      left: $rank-width !important;
+      background-color: $blue;
+      z-index: $top-heading-index;
+    }
+    .year-th, .year-tb {
+      min-width: $cell-size;
+      left: $name-width !important;
+      background-color: $blue;
+      z-index: $top-heading-index;
+    }
+
+    .year-tb, .rank-tb, .name-tb {
+      z-index: $side-heading-index;
+    }
+
+    .year-main-th, .year-main-tb {
+      min-width: $cell-size;
+      left: $rank-width !important;
+      background-color: $blue;
+      z-index: $top-heading-index;
+    }
+
+    .pull-th-left {
+      left: 0px !important;
+    }
+
+    th, td {
+      min-width: $cell-size;
+    }
+  }
+}
+
+@media (max-width: 1000px) {
+  .nav-container {
+    align-items: center;
+    .nav-link {
+      font-size: 16px !important;
+    }
+  }
+}
+
+@media (max-width: 800px) {
+  html {
+    box-shadow: none;
+    padding: 0;
+  }
+
+  label {
+    margin-top: 10px;
+  }
+
+  .post-aside {
+    display: none;
+  }
+
+  .ui-slider-horizontal {
+    width: 94%;
+    margin: auto;
+  }
+
+  .btn-csv {
+    margin-top: 0px;
+  }
+
+  .filter-handle {
+    margin-top: -1.25%;
+  }
+
+  .filter-row {
+    margin-bottom: 0px;
+  }
+
+  .filter-label {
+    margin-top: 10px;
+  }
+
+  .slider {
+    margin: 20px 0 20px 0;
+  }
+
+  /* MOBILE MENU */
+
+  .nav-container {
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    align-items: center;
+
+    label {
+      margin-left: 10px;
+    }
+  }
+
+  .nav-form {
+    display: flex;
+    margin-right: 10px !important;
+  }
+
+  .header-logo {
+    display: none;
+  }
+
+  .show-mobile-menu {
+    display: block;
+    position: relative;
+    padding: 0;
+    margin: 0;
+  }
+
+  .mobile-logo {
+    display: block;
+    z-index: 100;
+    flex: 1 1 auto;
+    padding-left: 15px;
+    box-sizing: border-box;
+  }
+
+  .mobile-menu-check:checked ~ .show-mobile-menu:after {
+    background-color: $blue;
+    color: white;
+    font-family: Arial;
+    content: "X";
+    left: 0;
+    top: 0;
+    position: absolute;
+    padding: 0 0.75em 0 0;
+    text-align: center;
+  }
+
+  .mobile-menu-check:checked ~ .nav-links {
+    max-height: 1000px;
+    overflow: auto;
+    margin-top: 10px;
+  }
+
+  .nav-links {
+    order: 4;
+    max-height: 0;
+    margin: 0;
+    overflow: hidden;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1 1 100%;
+    .nav-link {
+      padding: 5px 0;
+      font-size: 22px !important;
+    }
+  }
+
+  @media (max-width: 600px) {
+    $cell-size: 50px;
+    $name-width: 90px;
+    $rank-width: 20px;
+    $top-heading-index: 25;
+    $side-heading-index: 20;
+    $table-font-size: 12px;
+
+    .table-scroll {
+      font-size: $table-font-size;
+      th {
+        font-size: $table-font-size;
+      }
+
+      .rank-th, .rank-tb {
+        min-width: $rank-width;
+        left: 0px;
+        background-color: $blue;
+        z-index: $top-heading-index;
+      }
+      .name-th, .name-tb {
+        min-width: $name-width;
+        left: $rank-width !important;
+        background-color: $blue;
+        z-index: $top-heading-index;
+      }
+      .year-th, .year-tb {
+        min-width: $cell-size;
+        left: $name-width !important;
+        background-color: $blue;
+        z-index: $top-heading-index;
+      }
+
+      .year-tb, .rank-tb, .name-tb {
+        z-index: $side-heading-index;
+      }
+
+      .year-main-th, .year-main-tb {
+        min-width: $cell-size;
+        left: $rank-width !important;
+        background-color: $blue;
+        z-index: $top-heading-index;
+      }
+
+      .pull-th-left {
+        left: 0px !important;
+      }
+
+      th, td {
+        min-width: $cell-size;
+      }
+    }
+  }
+}
+
+@media (max-width: 400px) {
+  .nav-form input {
+    width: 150px !important;
+  }
+}

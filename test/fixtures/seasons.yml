@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  year_start: 1
+  year_end: 1
+  name: MyString
+  cwhl_id: 1
+
+two:
+  year_start: 1
+  year_end: 1
+  name: MyString
+  cwhl_id: 1

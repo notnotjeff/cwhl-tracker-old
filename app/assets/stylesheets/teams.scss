@@ -1,0 +1,25 @@
+// Place all the styles related to the teams controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.team-links {
+  font-size: 14px;
+}
+
+.team-profile-heading {
+  margin-bottom: 50px;
+}
+
+#team-profile-filter {
+  margin-top: 10px;
+}
+
+.team-show-btn {
+  margin-top: -10px;
+}
+
+@media screen and (max-width: 767px) {
+  .table-responsive {
+      border: none !important;
+  }
+}

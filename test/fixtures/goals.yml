@@ -1,0 +1,39 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  game_id: 1
+  team_id: 
+  season_id: 1
+  goalscorer_id: 1
+  a1_id: 1
+  a2_id: 1
+  opposing_team_id: 1
+  team_score: 1
+  opposing_team_score: 1
+  period: 1
+  time: 1
+  is_empty_net: false
+  is_powerplay: false
+  is_shorthanded: false
+  is_penalty_shot: false
+  team_player_count: 1
+  opposing_team_player_count: 1
+
+two:
+  game_id: 1
+  team_id: 
+  season_id: 1
+  goalscorer_id: 1
+  a1_id: 1
+  a2_id: 1
+  opposing_team_id: 1
+  team_score: 1
+  opposing_team_score: 1
+  period: 1
+  time: 1
+  is_empty_net: false
+  is_powerplay: false
+  is_shorthanded: false
+  is_penalty_shot: false
+  team_player_count: 1
+  opposing_team_player_count: 1

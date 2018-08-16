@@ -1,0 +1,22 @@
+<% provide(:title, "#{@player.full_name} Monthly Breakdown") %>
+<div class="player-info">
+	<h1>
+		<%= @player.full_name %>
+		<%= link_to "Profile", player_path(@player), {class: 'btn btn-default'} %>
+	</h1>
+</div>
+
+<%= form_tag monthly_breakdown_player_path(@player), :method => 'get' do |f| %>
+  <div class="row">
+    <div class="col-md-2">
+      <%= select_tag :team, options_for_select(@seasons, @team), { class: 'form-control' } %>
+    </div>
+    <div class="col-md-1">
+      <%= submit_tag 'Submit', { class: 'filter-button btn btn-default', id: "gb-button"} %>
+    </div>
+  </div>
+<% end %>
+
+<div class="enable-table-scroll">
+  <%= render 'skater_monthly_table', path: "skaters" %>
+</div>

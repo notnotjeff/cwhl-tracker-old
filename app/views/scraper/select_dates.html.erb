@@ -1,0 +1,28 @@
+<div class="row">
+	<div class="col-md-8">
+		<div class="date-selector-container">
+			<h2>Scrape Range</h2>
+			<%= form_tag scrape_games_path, :method => 'get' do %>
+				<%= date_field_tag :start_date %>
+				<%= date_field_tag :end_date %>
+				<%= submit_tag 'Scrape Games'%>
+			<% end -%>
+		</div>
+
+		<div class="season-selector-container">
+			<h2>Scrape Full Seasons</h2>
+			<%= form_tag scrape_games_path, :method => 'get' do %>
+				<%= select_tag :season, options_for_select(Season.seasons_for_option) %>
+				<%= submit_tag 'Scrape Season'%>
+			<% end -%>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<h2>Scraped Seasons</h2>
+		<% @seasons.each do |season| %>
+			<ul>
+				<li><%= season.abbreviation %></li>
+			</ul>
+		<% end %>
+	</div>
+</div>

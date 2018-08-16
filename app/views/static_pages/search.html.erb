@@ -1,0 +1,22 @@
+<div class="search-container">
+  <div class="search-players">
+    <h3>Players</h3>
+    <% if @players != nil %>
+      <% @players.each do |p| %>
+        <li><%= link_to "#{p.last_name}, #{p.first_name}", player_path(p) %></li>
+      <% end %>
+    <% else %>
+      No results found
+    <% end %>
+  </div>
+  <div class="search-teams">
+    <h3>Teams</h3>
+    <% if @teams != nil %>
+      <% @teams.each do |t| %>
+        <li><%= link_to "#{t.city} #{t.name}", team_path(t) %></li>
+      <% end %>
+    <% else %>
+      No results found
+    <% end %>
+  </div>
+</div>

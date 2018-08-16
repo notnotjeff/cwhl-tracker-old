@@ -1,0 +1,72 @@
+<% provide(:title, "Skaters") %>
+
+<div class="heading">
+  <h1>Skaters</h1>
+</div>
+<%= render 'filter', low_age: @low_age, high_age: @high_age, checked: @rookie %>
+
+<div class="row desc-heading">
+  <div class="col-md-7">
+    <span class="table-category"><%= @report %> (<%= @situation %>)</span>
+    <span>
+      <%= link_to "CSV".html_safe, skaters_path(games_played: params[:games_played], 
+                                                situation: params[:situation], 
+                                                position: params[:position], 
+                                                low_age_range: params[:low_age_range], 
+                                                high_age_range: params[:high_age_range], 
+                                                team: params[:team], 
+                                                handedness: params[:handedness], 
+                                                rookie: params[:rookie], 
+                                                skater_select: params[:skater_select], 
+                                                year_start: params[:year_start], 
+                                                year_end: params[:year_end], 
+                                                regular: params[:regular],
+                                                playoffs: params[:playoffs],
+                                                aggregate: params[:aggregate], format: "csv"), { class: "btn btn-success btn-sm btn-csv" } %>
+    </span>
+  </div>
+</div>
+
+<div class="table-scroll" id="skaters-table">
+  <%= render 'skaters_table', path: "skaters" %>
+</div>
+
+<div id="paginate">
+  <%= render 'paginate' %>
+</div>
+
+<div id="show-legend">
+  <span>[+] Show Legend</span>
+</div>
+
+<div id="legend" class="table-legend">
+  <% if @report == "Penalty Breakdown" %>
+  	<%= render 'skaters/legend/penalty_legend' %>
+  <% elsif @situation == "Powerplay" && @report == "On Ice Breakdown" %>
+    <%= render 'skaters/legend/gf_pp_legend' %>
+  <% elsif @situation == "All Situations" && @report == "On Ice Breakdown" %>
+    <%= render 'skaters/legend/gf_as_legend' %>
+  <% elsif @situation == "Shorthanded" && @report == "On Ice Breakdown" %>
+    <%= render 'skaters/legend/gf_sh_legend' %>
+  <% elsif @situation == "Even Strength" && @report == "On Ice Breakdown" %>
+    <%= render 'skaters/legend/gf_es_legend' %>
+  <% elsif @situation == 'Empty Net' && @report == "On Ice Breakdown" %>
+    <%= render 'skaters/legend/gf_en_legend' %>
+  <% elsif @situation == 'Shootout' %>
+    <%= render 'skaters/legend/so_legend' %>
+  <% elsif @situation == 'Penalty Shot' %>
+    <%= render 'skaters/legend/ps_legend' %>
+  <% elsif @situation == "Powerplay" && @report == "Scoring" %>
+    <%= render 'skaters/legend/s_pp_legend' %>
+  <% elsif @situation == "All Situations" && @report == "Scoring" %>
+    <%= render 'skaters/legend/s_as_legend' %>
+  <% elsif @situation == "Shorthanded" && @report == "Scoring" %>
+    <%= render 'skaters/legend/s_sh_legend' %>
+  <% elsif @situation == "Even Strength" && @report == "Scoring" %>
+    <%= render 'skaters/legend/s_es_legend' %>
+  <% elsif @situation == 'Empty Net' && @report == "Scoring" %>
+    <%= render 'skaters/legend/s_en_legend' %>
+  <% else %>
+    <%= render 'skaters/legend/s_as_legend' %>
+  <% end -%>
+</div>

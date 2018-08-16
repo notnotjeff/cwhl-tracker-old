@@ -1,0 +1,37 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  cwhl_game_id: 1
+  game_date: 2017-08-21 21:18:26
+  game_number: 1
+  venue: MyString
+  attendance: 1
+  start_time: MyString
+  end_time: MyString
+  duration: MyString
+  home_team_id: MyString
+  visiting_team_id: MyString
+  overtime: false
+  shootout: false
+  periods: 1
+  home_score: 1
+  visitor_score: 1
+  season_id: 1
+
+two:
+  cwhl_game_id: 1
+  game_date: 2017-08-21 21:18:26
+  game_number: 1
+  venue: MyString
+  attendance: 1
+  start_time: MyString
+  end_time: MyString
+  duration: MyString
+  home_team_id: MyString
+  visiting_team_id: MyString
+  overtime: false
+  shootout: false
+  periods: 1
+  home_score: 1
+  visitor_score: 1
+  season_id: 1

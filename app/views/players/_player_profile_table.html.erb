@@ -1,0 +1,5 @@
+<% if @player.position == "G" %>
+  <%= render 'goalie_table', statlines: @statlines, path: path, season: false %>
+<% else %>
+  <%= render 'skater_table', statlines: @statlines, path: path, season: false %>
+<% end -%>

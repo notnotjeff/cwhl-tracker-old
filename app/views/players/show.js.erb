@@ -1,0 +1,20 @@
+$("#player-profile-table").html('<%= escape_javascript(render("player_profile_table", path: "player")) %>');
+$("#player-game-breakdown").html('<%= escape_javascript(render("player_game_breakdown_table", path: "player_game")) %>');
+$("#player-penalty-breakdown").html('<%= escape_javascript(render("penalty_breakdown", path: "player_penalties")) %>');
+$("#player-on-ice-events").html('<%= escape_javascript(render("on_ice_events", path: "player_on_ice_events")) %>');
+
+$('#player-profile-table .active-link').closest('th').attr('id', 'active-th')
+profile_active_column = $('#player-profile-table .active-link').closest('th').index() + 1
+$('#player-profile-table table tbody td:nth-child(' + profile_active_column + ')').addClass('active-tcol')
+
+$('#player-game-breakdown .active-link').closest('th').attr('id', 'active-th')
+player_game_breakdown_active_column = $('#player-game-breakdown .active-link').closest('th').index() + 1
+$('#player-game-breakdown table tbody td:nth-child(' + player_game_breakdown_active_column + ')').addClass('active-tcol')
+
+$('#player-penalty-breakdown .active-link').closest('th').attr('id', 'active-th')
+player_penalty_breakdown_active_column = $('#player-penalty-breakdown .active-link').closest('th').index() + 1
+$('#player-penalty-breakdown table tbody td:nth-child(' + player_penalty_breakdown_active_column + ')').addClass('active-tcol')
+
+$('#player-on-ice-events .active-link').closest('th').attr('id', 'active-th')
+player_on_ice_events_active_column = $('#player-on-ice-events .active-link').closest('th').index() + 1
+$('#player-on-ice-events table tbody td:nth-child(' + player_on_ice_events_active_column + ')').addClass('active-tcol')
