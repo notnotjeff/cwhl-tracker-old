@@ -97,7 +97,7 @@ class GamesController < ApplicationController
     end
 
     def set_result(result)
-      result = "Any" unless result == "Overtime" || result == "Shootout" || result == "Regulation"
+      result = "Any" unless result == "Overtime" || result == "Shootout" || result == "Regulation" || result == "OT & SO"
       return result
     end
 
