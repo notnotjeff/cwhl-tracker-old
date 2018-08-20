@@ -23,6 +23,8 @@ class Skater < ApplicationRecord
 			column_names.delete("shots")
 			column_names.delete("shooting_percent")
 			column_names.delete("shots_pg")
+			column_names.delete("fights")
+			column_names.delete("fights_pg")
 			csv << column_names
 			all.each do |skater|
 				csv << skater.attributes.values_at(*column_names)
@@ -179,12 +181,16 @@ class Skater < ApplicationRecord
 		if h == "L" || h == "R"
 			where("shoots = ?", h)
 		else
-			where("shoots = ? OR shoots = ?", "L", "R")
+			where("shoots = ? OR shoots = ? OR shoots = ?", "L", "R", "")
 		end
 	end
 
-	def self.age_range_select(low, high)
-		where("season_age >= ? AND season_age <= ?", low.to_i, high.to_i)
+	def self.age_range_select(low, high, exempt_zero)
+		if exempt_zero == true
+			where("season_age >= ? AND season_age <= ?", low.to_i, high.to_i)
+		else
+			where("(season_age >= ? AND season_age <= ?) OR season_age = 0", low.to_i, high.to_i)
+		end
 	end
 
 	def self.position_select(position)
@@ -203,7 +209,7 @@ class Skater < ApplicationRecord
 		elsif position == "C"
 			where("position = ?", "C")
 		else
-			where("position = ? OR position = ? OR position = ? OR position = ? OR position = ?", "LW", "RW", "C", "D", "F")
+			where("position = ? OR position = ? OR position = ? OR position = ? OR position = ? OR position = ?", "LW", "RW", "C", "D", "F", "")
 		end
 	end
 
@@ -219,6 +225,18 @@ class Skater < ApplicationRecord
 			season_ids = Season.where('year_start >= ? AND year_end <= ? AND year_end != ?', year_start, year_end, year_start).pluck(:cwhl_id)
 		end
 		return where(season_id: season_ids)
+	end
+
+	def self.set_season_ages
+		seasons = self.where(season_age: nil).or(self.where(season_age: 0))
+
+		seasons.each do |season|
+			profile = Player.find(season.player_id)
+			next if profile.birthdate == nil
+			season_profile = Season.find_by(cwhl_id: season.season_id)
+			season_age = get_age_at_date(season_profile.start_date, profile.birthdate)
+			season.update_attributes(season_age: season_age)
+		end
 	end
 
 	def self.aggregate_and_minimum_games(aggregation_type, minimum_games)
@@ -825,4 +843,9 @@ class Skater < ApplicationRecord
 
 		return skater_stats
 	end
+
+	private
+		def self.get_age_at_date(date, birthdate)
+			BigDecimal.new((date - birthdate).to_i) / BigDecimal.new(365)
+		end
 end

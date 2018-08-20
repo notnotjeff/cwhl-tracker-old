@@ -55,7 +55,9 @@
 			<div class="col-md-2">
 				<span class="filter-label">Set Status:</span>
 				<%= check_box_tag :rookie, 1, checked  %>
-				<%= label_tag :rookie, 'Only Rookies'  %>
+				<%= label_tag :rookie, 'Only Rookies'  %> <br>
+				<%= check_box_tag :no_age, 1, age_checked  %>
+				<%= label_tag :no_age, 'Exempt 0 Ages'  %>
 			</div>
 		</div>
 

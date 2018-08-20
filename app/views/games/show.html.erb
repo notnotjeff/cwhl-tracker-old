@@ -14,6 +14,7 @@
 			<li>Time: <%= @game.game_date.strftime("%l:%M %P") %></li>
 			<li>Arena: <%= @game.venue %></li>
 			<li>GameID: <%= @game.cwhl_game_id %></li>
+			<li><%= @game.is_forfeit == true && @game.winning_team_id == @game.home_team_id ? "Visitor Forfeit" : "Home Forfeit" %></li>
 		</ul>
 	</div>
 	<div class="col-md-4">

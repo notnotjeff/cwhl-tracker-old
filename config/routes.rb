@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 	get '/teams', to: 'teams#index'
   get '/about', to: 'static_pages#about'
 	get '/search', to: 'static_pages#search'
+	get '/player_info', to: 'players#index', defaults: { format: :csv }
 	
 	get '/google5eb2aada44affd0e', to: proc { |env| [200, {}, ["google-site-verification: google5eb2aada44affd0e.html"]] }
 
@@ -41,5 +42,6 @@ Rails.application.routes.draw do
 		get '/penalties', to: 'scraper#penalties'
 		get '/update_goalies', to: 'scraper#update_goalies'
 		get '/update_skaters', to: 'scraper#update_skaters'
+		get '/profile_test', to: 'scraper#profile_test'
   end
 end

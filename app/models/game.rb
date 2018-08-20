@@ -234,8 +234,13 @@ class Game < ApplicationRecord
 		def self.scrape_game(game)
 			feed_url = "https://lscluster.hockeytech.com/feed/index.php?feed=statviewfeed&view=gameSummary&game_id=#{game}&key=eb62889ab4dfb04e&site_id=2&client_code=cwhl&lang=en&league_id=&callback=angular.callbacks._2"
 
-			# Scrape Game
-			game_file = game_scraper(feed_url)
+			
+			if ![396, 603, 604, 413, 425].include? game.to_i  # IDs of empty games that should be skipped if trying to scrape
+				# Scrape Game
+				game_file = game_scraper(feed_url)
+			else
+				game_file = false
+			end
 
 			# Add Game To DB
 			add_game(game_file) unless game_file == false
@@ -264,15 +269,15 @@ class Game < ApplicationRecord
 			season_id = doc["details"]["seasonId"]
 			Season.scrape_all_seasons if Season.find_by(cwhl_id: season_id)
 			season = Season.find_by(cwhl_id: season_id)
-		  return false if season.nil? || season.is_allstar_game == true || season.is_exhibition == true
+		  	return false if season.nil? || season.is_allstar_game == true || season.is_exhibition == true
 
 		  # Scrape Game Information
 		  game_info = game_summary_scrape(doc)
-
+		  
 		  # Cut Out Each Team's Roster Information
 		  home_team_scrape = doc["homeTeam"]
 		  visiting_team_scrape = doc["visitingTeam"]
-
+		  
 		  # Input Each Team's Players, Coaches and Goalies Into Array To Be Added To DB
 		  home_coaches, home_skaters, home_goalies, home_city, home_nickname, home_abb = team_scrape(home_team_scrape)
 		  visiting_coaches, visiting_skaters, visiting_goalies, visiting_city, visiting_nickname, visiting_abb = team_scrape(visiting_team_scrape)
@@ -328,167 +333,193 @@ class Game < ApplicationRecord
 		def self.game_summary_scrape(doc)
 			# Initialize Variables
 			gs = Hash.new
-			overtime = false
-			shootout = false
-
+			gs[:status] = true
+			
 			game_summary = doc["details"]
-		  referees_data = doc["referees"]
-		  linesmen_data = doc["linesmen"]
-		  three_stars_data = doc["mostValuablePlayers"]
-		  penalty_shots_data = doc["penaltyShots"]
-		  home_team_id = doc["homeTeam"]["info"]["id"].to_i
-	  	visiting_team_id = doc["visitingTeam"]["info"]["id"].to_i
-	  	period_data = doc["periods"]
-	  	periods = doc["periods"].count
-	  	overtime = true if periods > 3
-	  	shootout = true if doc["hasShootout"] == true
+			status = doc["details"]["status"]
+			referees_data = doc["referees"]
+			linesmen_data = doc["linesmen"]
+			three_stars_data = doc["mostValuablePlayers"]
+			penalty_shots_data = doc["penaltyShots"]
+			home_team_id = doc["homeTeam"]["info"]["id"].to_i
+			visiting_team_id = doc["visitingTeam"]["info"]["id"].to_i
+			period_data = doc["periods"]
+			periods = doc["periods"].count
+			overtime = periods > 3 ? true : false
+			shootout = doc["hasShootout"] == true ? true : false
 
-		  # Cycle Through Period Stats And Store In Hash
-	  	period_data.each do |period|
-	  		period_index = period["info"]["id"].to_i - 1
+			# Input Game Summary Stats Into Hash
+			gs[:game_id] = doc["details"]["id"]
+			gs[:game_date] = Date.parse(doc["details"]["date"])
+			gs[:game_number] = doc["details"]["gameNumber"].to_i
+			gs[:venue] = doc["details"]["venue"]
+			gs[:attendance] = doc["details"]["attendance"].to_i
+			gs[:start_time] = doc["details"]["startTime"]
+			gs[:end_time]  = doc["details"]["endTime"]
+			gs[:duration] = doc["details"]["duration"]
+			gs[:season_id] = doc["details"]["seasonId"].to_i
+			gs[:home_team_id] = home_team_id
+			gs[:visiting_team_id] = visiting_team_id
+			gs[:overtime] = overtime
+			gs[:shootout] = shootout
+			gs[:periods] = periods
+			
+			# If game was forfeitted then set hash values to empty arrays
+			if !status[/Forfeit/].nil?
+				gs[:winning_team_id] = status[/Home/].nil? ? home_team_id : visiting_team_id
+				gs[:status] = false
 
-	  		gs[:scoring_summary] ||= Hash.new
-	  		gs[:scoring_summary][:home_team] ||= Hash.new
-	  		gs[:scoring_summary][:visiting_team] ||= Hash.new
-	  		gs[:scoring_summary][:home_team][:goals] ||= []
-	  		gs[:scoring_summary][:visiting_team][:goals] ||= []
-	  		gs[:scoring_summary][:home_team][:shots] ||= []
-	  		gs[:scoring_summary][:visiting_team][:shots] ||= []
+				gs[:scoring_summary] ||= Hash.new
+				gs[:scoring_summary][:home_team] ||= Hash.new
+				gs[:scoring_summary][:visiting_team] ||= Hash.new
+				gs[:scoring_summary][:home_team][:goals] ||= []
+				gs[:scoring_summary][:visiting_team][:goals] ||= []
+				gs[:scoring_summary][:home_team][:shots] ||= []
+				gs[:scoring_summary][:visiting_team][:shots] ||= []
 
-	  		# Log Overtimes Separately So In Playoffs Multiple Overtimes Are Allowed
-	  		if period_index > 2
-	  			overtime_number = "OT#{period_index - 2}"
-	  			gs[:scoring_summary][:overtimes] ||= Hash.new
-	  			gs[:scoring_summary][:overtimes][overtime_number] ||= Hash.new
-	  			gs[:scoring_summary][:overtimes][overtime_number][:home_team] ||= Hash.new
-	  			gs[:scoring_summary][:overtimes][overtime_number][:visiting_team] ||= Hash.new
-	  			gs[:scoring_summary][:overtimes][overtime_number][:number] = period_index - 2
+				gs[:scoring_summary][:home_team][:goals][0] = gs[:scoring_summary][:home_team][:goals][1] = gs[:scoring_summary][:home_team][:goals][2] = 0
+				gs[:scoring_summary][:home_team][:shots][0] = gs[:scoring_summary][:home_team][:shots][1] = gs[:scoring_summary][:home_team][:shots][2] = 0
+				gs[:scoring_summary][:visiting_team][:goals][0] = gs[:scoring_summary][:visiting_team][:goals][1] = gs[:scoring_summary][:visiting_team][:goals][2] = 0
+				gs[:scoring_summary][:visiting_team][:shots][0] = gs[:scoring_summary][:visiting_team][:shots][1] = gs[:scoring_summary][:visiting_team][:shots][2] = 0
 
-	  			if period["stats"]["homeGoals"].to_i == 1
-	  				gs[:scoring_summary][:overtimes][overtime_number][:winning_team] = home_team_id
-	  			elsif period["stats"]["visitingGoals"].to_i == 1
-	  				gs[:scoring_summary][:overtimes][overtime_number][:winning_team] = visiting_team_id
-	  			else
-	  				gs[:scoring_summary][:overtimes][overtime_number][:winning_team] = 0
-	  			end
+				return gs
+			else
+				# Game was played so scrape game data
+				# Cycle Through Period Stats And Store In Hash
+				period_data.each do |period|
+					period_index = period["info"]["id"].to_i - 1
+					
+					gs[:scoring_summary] ||= Hash.new
+					gs[:scoring_summary][:home_team] ||= Hash.new
+					gs[:scoring_summary][:visiting_team] ||= Hash.new
+					gs[:scoring_summary][:home_team][:goals] ||= []
+					gs[:scoring_summary][:visiting_team][:goals] ||= []
+					gs[:scoring_summary][:home_team][:shots] ||= []
+					gs[:scoring_summary][:visiting_team][:shots] ||= []
+					
+					# Log Overtimes Separately So In Playoffs Multiple Overtimes Are Allowed
+					if period_index > 2
+						overtime_number = "OT#{period_index - 2}"
+						gs[:scoring_summary][:overtimes] ||= Hash.new
+						gs[:scoring_summary][:overtimes][overtime_number] ||= Hash.new
+						gs[:scoring_summary][:overtimes][overtime_number][:home_team] ||= Hash.new
+						gs[:scoring_summary][:overtimes][overtime_number][:visiting_team] ||= Hash.new
+						gs[:scoring_summary][:overtimes][overtime_number][:number] = period_index - 2
+
+						if period["stats"]["homeGoals"].to_i == 1
+							gs[:scoring_summary][:overtimes][overtime_number][:winning_team] = home_team_id
+						elsif period["stats"]["visitingGoals"].to_i == 1
+							gs[:scoring_summary][:overtimes][overtime_number][:winning_team] = visiting_team_id
+						else
+							gs[:scoring_summary][:overtimes][overtime_number][:winning_team] = 0
+						end
 
 
-	  			gs[:scoring_summary][:overtimes][overtime_number][:home_team][:goals] = period["stats"]["homeGoals"].to_i
-	  			gs[:scoring_summary][:overtimes][overtime_number][:home_team][:shots] = period["stats"]["homeShots"].to_i
-	  			gs[:scoring_summary][:overtimes][overtime_number][:visiting_team][:goals] = period["stats"]["visitingGoals"].to_i
-	  			gs[:scoring_summary][:overtimes][overtime_number][:visiting_team][:shots] = period["stats"]["visitingShots"].to_i
-	  		else
-		  		gs[:scoring_summary][:home_team][:goals][period_index] = period["stats"]["homeGoals"].to_i
-		  		gs[:scoring_summary][:home_team][:shots][period_index] = period["stats"]["homeShots"].to_i
-		  		gs[:scoring_summary][:visiting_team][:goals][period_index] = period["stats"]["visitingGoals"].to_i
-		  		gs[:scoring_summary][:visiting_team][:shots][period_index] = period["stats"]["visitingShots"].to_i
-		  	end
-	  	end
+						gs[:scoring_summary][:overtimes][overtime_number][:home_team][:goals] = period["stats"]["homeGoals"].to_i
+						gs[:scoring_summary][:overtimes][overtime_number][:home_team][:shots] = period["stats"]["homeShots"].to_i
+						gs[:scoring_summary][:overtimes][overtime_number][:visiting_team][:goals] = period["stats"]["visitingGoals"].to_i
+						gs[:scoring_summary][:overtimes][overtime_number][:visiting_team][:shots] = period["stats"]["visitingShots"].to_i
+					else
+						gs[:scoring_summary][:home_team][:goals][period_index] = period["stats"]["homeGoals"].to_i
+						gs[:scoring_summary][:home_team][:shots][period_index] = period["stats"]["homeShots"].to_i
+						gs[:scoring_summary][:visiting_team][:goals][period_index] = period["stats"]["visitingGoals"].to_i
+						gs[:scoring_summary][:visiting_team][:shots][period_index] = period["stats"]["visitingShots"].to_i
+					end
+				end
 
-		  # Input Game Summary Stats Into Hash
-		  gs[:game_id] = doc["details"]["id"]
-		  gs[:game_date] = Date.parse(doc["details"]["date"])
-		  gs[:game_number] = doc["details"]["gameNumber"].to_i
-		  gs[:venue] = doc["details"]["venue"]
-		  gs[:attendance] = doc["details"]["attendance"].to_i
-		  gs[:start_time] = doc["details"]["startTime"]
-		  gs[:end_time]  = doc["details"]["endTime"]
-		  gs[:duration] = doc["details"]["duration"]
-		  gs[:season_id] = doc["details"]["seasonId"].to_i
-		  gs[:home_team_id] = home_team_id
-		  gs[:visiting_team_id] = visiting_team_id
-		  gs[:overtime] = overtime
-		  gs[:shootout] = shootout
-		  gs[:periods] = periods
+				# Calculate Goal Totals
+				home_goals = 0
+				gs[:scoring_summary][:home_team][:goals].each do |g|
+					home_goals += g.to_i
+				end
 
-		  # Calculate Goal Totals
-	  	home_goals = 0
-	  	gs[:scoring_summary][:home_team][:goals].each do |g|
-	  		home_goals += g.to_i
-	  	end
+				visitor_goals = 0
+				gs[:scoring_summary][:visiting_team][:goals].each do |g|
+					visitor_goals += g.to_i
+				end
 
-	  	visitor_goals = 0
-	  	gs[:scoring_summary][:visiting_team][:goals].each do |g|
-	  		visitor_goals += g.to_i
-	  	end
+				if home_goals > visitor_goals
+					gs[:winning_team_id] = gs[:home_team_id]
+				elsif home_goals < visitor_goals
+					gs[:winning_team_id] = gs[:visiting_team_id]
+				elsif shootout == true && overtime == false # Game 1001190 From 2005 Has No Tracked Overtime, This Fixes
+					gs[:winning_team_id] = doc["shootoutDetails"]["winningTeam"]["id"].to_i
+				else
+					gs[:scoring_summary][:overtimes].each do |overtimes, overtime|
+						if overtime[:winning_team] != 0
+							gs[:winning_team_id] = overtime[:winning_team]
+							break
+						end
+					end
+					gs[:winning_team_id] = doc["shootoutDetails"]["winningTeam"]["id"].to_i unless shootout == false
+				end
 
-	  	if home_goals > visitor_goals
-	  		gs[:winning_team_id] = gs[:home_team_id]
-	  	elsif home_goals < visitor_goals
-	  		gs[:winning_team_id] = gs[:visiting_team_id]
-	  	elsif shootout == true && overtime == false # Game 1001190 From 2005 Has No Tracked Overtime, This Fixes
-	  		gs[:winning_team_id] = doc["shootoutDetails"]["winningTeam"]["id"].to_i
-	  	else
-	  		gs[:scoring_summary][:overtimes].each do |overtimes, overtime|
-	  			if overtime[:winning_team] != 0
-	  				gs[:winning_team_id] = overtime[:winning_team]
-	  				break
-	  			end
-	  		end
-		  	gs[:winning_team_id] = doc["shootoutDetails"]["winningTeam"]["id"].to_i unless shootout == false
-		  end
+				# Add A Goal To The Score For Shootout Winning Team
+				if shootout == true || overtime == true
+					gs[:home_team_id] == gs[:winning_team_id] ? home_goals += 1 : visitor_goals += 1
+				end
 
-	  	# Add A Goal To The Score For Shootout Winning Team
-	  	if shootout == true || overtime == true
-		  	gs[:home_team_id] == gs[:winning_team_id] ? home_goals += 1 : visitor_goals += 1
-		  end
+				gs[:home_score] = home_goals
+				gs[:visitor_score] = visitor_goals
 
-	  	gs[:home_score] = home_goals
-	  	gs[:visitor_score] = visitor_goals
+				# Calculate Shot Totals
+				home_shots = 0
+				gs[:scoring_summary][:home_team][:shots].each do |shots|
+					home_shots += shots.to_i
+				end
 
-	  	# Calculate Shot Totals
-	  	home_shots = 0
-	  	gs[:scoring_summary][:home_team][:shots].each do |shots|
-	  		home_shots += shots.to_i
-	  	end
+				visitor_shots = 0
+				gs[:scoring_summary][:visiting_team][:shots].each do |shots|
+					visitor_shots += shots.to_i
+				end
 
-	  	visitor_shots = 0
-	  	gs[:scoring_summary][:visiting_team][:shots].each do |shots|
-	  		visitor_shots += shots.to_i
-	  	end
+				gs[:home_shots] = home_shots
+				gs[:visitor_shots] = visitor_shots
 
-	  	gs[:home_shots] = home_shots
-	  	gs[:visitor_shots] = visitor_shots
+				referees_data.each do |referee|
+					number = referee["jerseyNumber"].to_i
+					first_name = referee["firstName"]
+					last_name = referee["lastName"]
+					role = referee["role"]
 
-		  referees_data.each do |referee|
-		  	number = referee["jerseyNumber"].to_i
-		  	first_name = referee["firstName"]
-		  	last_name = referee["lastName"]
-		  	role = referee["role"]
+					gs[:game_referees] ||= Hash.new
+					gs[:game_referees]["#{number}"] = { first_name: first_name,
+														last_name: last_name,
+														jersey_number: number,
+														role: role }
+				end
 
-		  	gs[:game_referees] ||= Hash.new
-		  	gs[:game_referees]["#{number}"] = { first_name: first_name,
-																						last_name: last_name,
-																						jersey_number: number,
-																						role: role }
-		  end
+				linesmen_data.each do |linesman|
+					number = linesman["jerseyNumber"].to_i
+					first_name = linesman["firstName"]
+					last_name = linesman["lastName"]
+					role = linesman["role"]
 
-		  linesmen_data.each do |linesman|
-		  	number = linesman["jerseyNumber"].to_i
-		  	first_name = linesman["firstName"]
-		  	last_name = linesman["lastName"]
-		  	role = linesman["role"]
+					gs[:game_linesmen] ||= Hash.new
+					gs[:game_linesmen]["#{number}"] = { first_name: first_name,
+																								last_name: last_name,
+																								jersey_number: number,
+																								role: role }
+				end
 
-		  	gs[:game_linesmen] ||= Hash.new
-		  	gs[:game_linesmen]["#{number}"] = { first_name: first_name,
-																						last_name: last_name,
-																						jersey_number: number,
-																						role: role }
-		  end
+				# Loop Through Stars And Collect IDs
+				three_stars_data.each do |star|
 
-		  # Loop Through Stars And Collect IDs
-		  three_stars_data.each do |star|
+					team_id = star["team"]["id"].to_i
+					player_id = star["player"]["info"]["id"].to_i
 
-		  	team_id = star["team"]["id"].to_i
-		  	player_id = star["player"]["info"]["id"].to_i
+					gs[:three_stars] ||= Hash.new
+					gs[:three_stars]["#{player_id}"] = {  team_id: team_id,
+																								player_id: player_id,
+																								star_number: three_stars_data.index(star) + 1}
+				end
+			end
 
-		  	gs[:three_stars] ||= Hash.new
-		  	gs[:three_stars]["#{player_id}"] = {  team_id: team_id,
-		  																				player_id: player_id,
-		  																				star_number: three_stars_data.index(star) + 1}
-		  end
+			
 
-		  return gs
+		 	
+
+		  	return gs
 		end
 
 		def self.team_scrape(team_data)
@@ -916,6 +947,7 @@ class Game < ApplicationRecord
 					game_date: game_info[:game_date],
 					season_id: game_info[:season_id],
 					is_playoffs: season.is_playoffs,
+					is_forfeit: !game_info[:status],
 					venue: game_info[:venue],
 					duration: time_in_seconds(game_info[:duration]).to_i, # Time Is Actually Minutes
 					start_time: game_info[:start_time],

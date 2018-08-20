@@ -6,7 +6,7 @@
 	</div>
 	<div class="col-md-10">
 		<h1>
-			<%= @team.full_name %>
+			<%= @team.name == "Alberta" ? "Alberta" : @team.full_name %>
 			<span class="team-links"><%= link_to "Team Roster", roster_team_path(@team), {class: 'btn btn-default team-show-btn'} %>
 			<%= link_to "Penalty Breakdown", penalties_team_path(@team), {class: 'btn btn-default team-show-btn'} %></span>
 		</h1>

@@ -43,6 +43,13 @@ class PlayersController < ApplicationController
     	end
 	end
 
+	def index
+		players = Player.all
+		respond_to do |format|
+			format.csv { render plain: players.to_csv }
+	 	 end
+	end
+
 	def goal_breakdown
 		@player = Player.find(params[:id])
 		@seasons = []

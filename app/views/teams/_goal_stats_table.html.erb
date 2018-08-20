@@ -5,6 +5,8 @@
 			<th class="name-th"><%= sort_link path, "city", "Name" %></th>
       		<th><%= sort_link path, "season_id", "Year" %></th>
 			<th><%= sort_link path, "games_played", "GP" %></th>
+			<th><%= sort_link path, "goals_for", "GF" %></th>
+			<th><%= sort_link path, "goals_against", "GA" %></th>
 			<th><%= sort_link path, "ev_goals_for", "EVGF" %></th>
 			<th><%= sort_link path, "ev_goals_against", "EVGA" %></th>
 			<th><%= sort_link path, "pp_goals_for", "PPGF" %></th>
@@ -31,6 +33,8 @@
 				<td class="name-tb"><%= link_to team.full_name, team_path(team.team_id) %></td>
 				<td><%= season == false ? team.season : season %></td>
 				<td><%= team.games_played %></td>
+				<td><%= team.goals_for %></td>
+				<td><%= team.goals_against %></td>
 				<td><%= team.ev_goals_for %></td>
 				<td><%= team.ev_goals_against %></td>
 				<td><%= team.pp_goals_for %></td>

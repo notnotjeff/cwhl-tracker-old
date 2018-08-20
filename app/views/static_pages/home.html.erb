@@ -1,7 +1,27 @@
 <div class="heading">
 	<h1>17-18 Leaderboard</h1>
 </div>
-<div class="row">
+<div class="row">	
+	<div class="col-md-6">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>GP</th>
+					<th>P/G</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @points_leaders.each do |p| %>
+					<tr>
+						<td><%= link_to p.full_name, player_path(p.player_profile) %></td>
+						<td><%= p.games_played %></td>
+						<td><%= p.points_pg %></td>
+					</tr>
+				<% end -%>
+			</tbody>
+		</table>
+	</div>
 	<div class="col-md-6">
 		<table class="table table-bordered">
 			<thead>
@@ -17,26 +37,6 @@
 						<td><%= link_to p.full_name, player_path(p.player_profile) %></td>
 						<td><%= p.games_played %></td>
 						<td><%= p.pr_points_pg %></td>
-					</tr>
-				<% end -%>
-			</tbody>
-		</table>
-	</div>
-	<div class="col-md-6">
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-					<th>Name</th>
-					<th>GP</th>
-					<th>S/G</th>
-				</tr>
-			</thead>
-			<tbody>
-				<% @shots_leaders.each do |p| %>
-					<tr>
-						<td><%= link_to p.full_name, player_path(p.player_profile) %></td>
-						<td><%= p.games_played %></td>
-						<td><%= p.shots_pg %></td>
 					</tr>
 				<% end -%>
 			</tbody>

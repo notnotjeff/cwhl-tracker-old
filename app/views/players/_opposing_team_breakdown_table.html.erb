@@ -7,12 +7,10 @@
             <th><%= sort_link "opposition_breakdown", "a1", "A1" %></th>
             <th><%= sort_link "opposition_breakdown", "a2", "A2" %></th>
             <th><%= sort_link "opposition_breakdown", "points", "P" %></th>
-            <th><%= sort_link "opposition_breakdown", "shots", "S" %></th>
             <th><%= sort_link "opposition_breakdown", "goals_pg", "G/G" %></th>
             <th><%= sort_link "opposition_breakdown", "a1_pg", "A1/G" %></th>
             <th><%= sort_link "opposition_breakdown", "a2_pg", "A2/G" %></th>
             <th><%= sort_link "opposition_breakdown", "points_pg", "P/G" %></th>
-            <th><%= sort_link "opposition_breakdown", "shots_pg", "S/G" %></th>
         </tr>
     </thead>
 
@@ -25,12 +23,10 @@
                 <td><%= team.a1 %></td>
                 <td><%= team.a2 %></td>
                 <td><%= team.points %></td>
-                <td><%= team.shots %></td>
                 <td><%= team.goals_pg %></td>
                 <td><%= team.a1_pg %></td>
                 <td><%= team.a2_pg %></td>
                 <td><%= team.points_pg %></td>
-                <td><%= team.shots_pg %></td>
             </tr>
         <% end %>
     </tbody>

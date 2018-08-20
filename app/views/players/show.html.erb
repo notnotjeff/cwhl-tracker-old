@@ -10,7 +10,7 @@
 	<ul class="bio-list">
 		<li>Position: <%= @player.position %></li>
 		<li>Shoots: <%= @player.shoots %></li>
-		<li>Birthdate: <%= @player.birthdate %> (<%= @player.age %>)</li>
+		<li>Birthdate: <%= @player.birthdate %> (<%= @player.age if @player.birthdate != nil %>)</li>
 		<li>Height: <%= @player.height %></li>
 	</ul>
 </div>

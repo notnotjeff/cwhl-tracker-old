@@ -2,7 +2,7 @@ class StaticPagesController < ApplicationController
 	def home
 		current_season = Season.find_by(current_season: true)
 		@primary_leaders = Skater.where('games_played > 5 AND season_id = ?', current_season.cwhl_id).order(pr_points_pg: :desc).limit(5)
-		@shots_leaders = Skater.where('games_played > 5 AND season_id = ?', current_season.cwhl_id).limit(5).order(shots_pg: :desc)
+		@points_leaders = Skater.where('games_played > 5 AND season_id = ?', current_season.cwhl_id).limit(5).order(points_pg: :desc)
 		@save_percent_leaders = Goalie.where('games_played > 5 AND season_id = ?', current_season.cwhl_id).where.not(save_percentage: 0.0/0).order(save_percentage: :desc).limit(5)
 		@shots_against_leaders = Goalie.where('games_played > 5 AND season_id = ?', current_season.cwhl_id).order(shots_against_pg: :desc).limit(5)
 	end

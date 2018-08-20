@@ -5,10 +5,11 @@ class ScraperController < ApplicationController
 
   def scrape_game
     time = Time.now
-    game = "1017953"
+    game = 396
     Game.scrape_game(game)
     Game.merge_games(time)
-    redirect_to game_path(Game.find(game.to_i))
+    game_page = Game.find_by(id: game.to_i)
+    redirect_to game_path(game_page) if !game_page.nil?
   end
 
   def scrape_games
@@ -30,9 +31,10 @@ class ScraperController < ApplicationController
     regulation = 74
     extra_name_characters_i = 75
     extra_name_characters_e = 80
+    home_forfeit = 249
 
     # Game Select
-    game_id = extra_name_characters_e
+    game_id = home_forfeit
   	game_file = Game.scraper_test(game_id)
 
   	# Return Page With Game File Result

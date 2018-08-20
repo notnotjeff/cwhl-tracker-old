@@ -4,7 +4,6 @@
       <th class="rank-th">#</th>
       <th class="name-th"><%= sort_link path, "game_name", "Game" %></th>
       <th><%= sort_link path, "game_date", "Date" %></th>
-      <th><%= sort_link path, "shots", "S" %></th>
       <th><%= sort_link path, "goals", "G" %></th>
       <th><%= sort_link path, "a1", "A1" %></th>
       <th><%= sort_link path, "a2", "A2" %></th>
@@ -18,7 +17,6 @@
         <td class="rank-tb"><%= i %></td>
         <td class="name-tb"><%= link_to game.game_name, game_path(Game.find_by(cwhl_game_id: game.game_id)) %></td>
         <td><%= game.game_date.strftime("%Y/%m/%d") %></td>
-        <td><%= game.shots %></td>
         <td><%= game.goals %></td>
         <td><%= game.a1 %></td>
         <td><%= game.a2 %></td>

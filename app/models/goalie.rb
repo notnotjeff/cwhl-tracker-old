@@ -137,6 +137,18 @@ class Goalie < ApplicationRecord
 		return where(season_id: season_ids)
 	end
 
+	def self.set_season_ages
+		seasons = self.where(season_age: nil).or(self.where(season_age: 0))
+
+		seasons.each do |season|
+			profile = Player.find(season.player_id)
+			next if profile.birthdate == nil
+			season_profile = Season.find_by(cwhl_id: season.season_id)
+			season_age = get_age_at_date(season_profile.start_date, profile.birthdate)
+			season.update_attributes(season_age: season_age)
+		end
+	end
+
 	def self.aggregate_and_minimum_games(aggregation_type, minimum_games)
 		if aggregation_type == 1
 			season_statement = " MAX(season_age) AS season_age,"
@@ -265,4 +277,9 @@ class Goalie < ApplicationRecord
 															saves_pg: saves_pg
 														)
 	end
+
+	private
+		def self.get_age_at_date(date, birthdate)
+			BigDecimal.new((date - birthdate).to_i) / BigDecimal.new(365)
+		end
 end

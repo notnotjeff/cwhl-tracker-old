@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180816153352) do
+ActiveRecord::Schema.define(version: 20180817172455) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -86,6 +86,7 @@ ActiveRecord::Schema.define(version: 20180816153352) do
     t.integer "home_total_shots"
     t.integer "visitor_total_shots"
     t.string "game_name"
+    t.boolean "is_forfeit"
     t.index ["cwhl_game_id"], name: "index_games_on_cwhl_game_id"
   end
 
@@ -721,6 +722,9 @@ ActiveRecord::Schema.define(version: 20180816153352) do
     t.decimal "game_misconducts_pg", precision: 5, scale: 2, default: "0.0"
     t.string "full_name"
     t.string "season_abbreviation"
+    t.integer "forfeit_wins"
+    t.integer "forfeit_losses"
+    t.integer "unforfeited_games_played"
     t.index ["team_code"], name: "index_team_statlines_on_team_code"
   end
 

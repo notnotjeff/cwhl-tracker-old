@@ -9,6 +9,7 @@ class SkatersController < ApplicationController
     @rookie = set_rookie(params[:rookie].to_i)
     @low_age = set_low_age(params[:min_age].to_i)
     @high_age = set_high_age(params[:max_age].to_i)
+    @exempt_zero_ages = set_exempt_zero_ages(params[:no_age].to_i)
 		@year_start, @year_end = set_season_range(params[:year_start].to_i, params[:year_end].to_i)
 		@is_regular, @is_playoffs = set_season_type(params[:regular], params[:playoffs])
 		@report = set_report(params[:report].to_s, @situation)
@@ -16,12 +17,11 @@ class SkatersController < ApplicationController
     @selected_skaters = set_selected_skaters(params[:skater_select])
     @aggregate = set_aggregate(params[:aggregate].to_i)
 		@season_range = @aggregate == 1 ? "#{@year_start.to_s[-2, 2]}-#{@year_end.to_s[-2, 2]}" : false
-
     # Filter Players Based On Params
     players_full = Skater.season_select(@year_start, @year_end, @is_regular, @is_playoffs)
 													.position_select(params[:position])
 													.teams_select(@teams)
-													.age_range_select(@low_age, @high_age)
+													.age_range_select(@low_age, @high_age, @exempt_zero_ages)
 													.select_handedness(params[:handedness])
 													.rookie_select(@rookie)
                           .skater_select(@selected_skaters)
@@ -33,7 +33,7 @@ class SkatersController < ApplicationController
     respond_to do |format|
       format.html
       format.csv { render plain: players_full.to_csv }
-			format.json { render json: players_full }
+			format.json { render json: players_full.to_json(:except => [:created_at, :updated_at, :fights, :fights_pg, :shots, :shots_pg]) }
 			format.js
     end
   end
@@ -155,6 +155,14 @@ class SkatersController < ApplicationController
         rookie = false
       end
       return rookie
+    end
+
+    def set_exempt_zero_ages(no_age)
+      if no_age == 1
+        return true
+      else
+        return false
+      end
     end
 
     def set_low_age(low_age)

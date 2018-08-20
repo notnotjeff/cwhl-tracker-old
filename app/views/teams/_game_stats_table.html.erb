@@ -8,9 +8,11 @@
       <th><%= sort_link path, "wins", "W" %></th>
       <th><%= sort_link path, "ot_wins", "OTW" %></th>
       <th><%= sort_link path, "so_wins", "SOW" %></th>
+      <th><%= sort_link path, "forfeit_wins", "FW" %></th>
       <th><%= sort_link path, "losses", "L" %></th>
       <th><%= sort_link path, "ot_losses", "OTL" %></th>
       <th><%= sort_link path, "so_losses", "SOL" %></th>
+      <th><%= sort_link path, "forfeit_losses", "FL" %></th>
       <th><%= sort_link path, "points", "PTS" %></th>
       <th><%= sort_link path, "points_percentage", "PTS%" %></th>
       <th><%= sort_link path, "row", "ROW" %></th>
@@ -33,9 +35,11 @@
 				<td><%= team.wins %></td>
 				<td><%= team.ot_wins %></td>
 				<td><%= team.so_wins %></td>
+				<td><%= team.forfeit_wins %></td>
 				<td><%= team.losses %></td>
 				<td><%= team.ot_losses %></td>
 				<td><%= team.so_losses %></td>
+				<td><%= team.forfeit_losses %></td>
 				<td><%= team.points %></td>
 				<td><%= team.points_percentage %></td>
 				<td><%= team.row %></td>

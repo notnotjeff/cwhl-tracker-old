@@ -30,6 +30,7 @@ module ApplicationHelper
 																teams: params[:teams],
 																handedness: params[:handedness],
 																rookie: params[:rookie],
+																no_age: params[:no_age],
 																skater_select: params[:skater_select],
 																year_start: params[:year_start],
 																year_end: params[:year_end],

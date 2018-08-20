@@ -76,9 +76,11 @@ class Team < ApplicationRecord
 										wins: 0,
 										ot_wins: 0,
 										so_wins: 0,
+										forfeit_wins: 0,
 										losses: 0,
 										ot_losses: 0,
 										so_losses: 0,
+										forfeit_losses: 0,
 										points: 0,
 										points_percentage: 0,
 										penalty_minutes: 0,
@@ -131,12 +133,16 @@ class Team < ApplicationRecord
 					end
 				end
 
-				if game.winning_team_id.to_i == game.home_team_id.to_i && game.overtime == false && game.shootout == false
+				if game.winning_team_id.to_i == game.home_team_id.to_i && game.is_forfeit == true
+					team_stats[:forfeit_wins] += 1
+				elsif game.winning_team_id.to_i == game.home_team_id.to_i && game.overtime == false && game.shootout == false
 					team_stats[:wins] += 1
 				elsif game.winning_team_id.to_i == game.home_team_id.to_i && game.overtime == true && game.shootout == false
 					team_stats[:ot_wins] += 1
 				elsif game.winning_team_id.to_i == game.home_team_id.to_i && game.shootout == true
 					team_stats[:so_wins] += 1
+				elsif game.winning_team_id.to_i != game.home_team_id.to_i && game.is_forfeit == true
+					team_stats[:forfeit_losses] += 1
 				elsif game.winning_team_id.to_i != game.home_team_id.to_i && game.overtime == false && game.shootout == false
 					team_stats[:losses] += 1
 				elsif game.winning_team_id.to_i != game.home_team_id.to_i && game.overtime == true && game.shootout == false
@@ -166,12 +172,16 @@ class Team < ApplicationRecord
 					end
 				end
 
-				if game.winning_team_id.to_i == game.visiting_team_id.to_i && game.overtime == false && game.shootout == false
+				if game.winning_team_id.to_i == game.visiting_team_id.to_i && game.is_forfeit == true
+					team_stats[:forfeit_wins] += 1
+				elsif game.winning_team_id.to_i == game.visiting_team_id.to_i && game.overtime == false && game.shootout == false
 					team_stats[:wins] += 1
 				elsif game.winning_team_id.to_i == game.visiting_team_id.to_i && game.overtime == true && game.shootout == false
 					team_stats[:ot_wins] += 1
 				elsif game.winning_team_id.to_i == game.visiting_team_id.to_i && game.shootout == true
 					team_stats[:so_wins] += 1
+				elsif game.winning_team_id.to_i != game.visiting_team_id.to_i && game.is_forfeit == true
+					team_stats[:forfeit_losses] += 1
 				elsif game.winning_team_id.to_i != game.visiting_team_id.to_i && game.overtime == false && game.shootout == false
 					team_stats[:losses] += 1
 				elsif game.winning_team_id.to_i != game.visiting_team_id.to_i && game.overtime == true && game.shootout == false
@@ -185,7 +195,7 @@ class Team < ApplicationRecord
 				team_stats[:shootout_goals] += 1 if a.scored == true
 			end
 
-			points = (team_stats[:wins].to_i * 2) + (team_stats[:ot_wins].to_i * 2) + (team_stats[:so_wins].to_i * 2) + (team_stats[:ot_losses].to_i) + (team_stats[:so_losses].to_i)
+			points = (team_stats[:wins].to_i * 2) + (team_stats[:ot_wins].to_i * 2) + (team_stats[:so_wins].to_i * 2) + (team_stats[:ot_losses].to_i) + (team_stats[:so_losses].to_i) + (team_stats[:forfeit_wins].to_i * 2)
 			goals_for = Goal.where(team_id: team_code, season_id: season_id).count
 			goals_against = Goal.where(opposing_team_id: team_code, season_id: season_id).count
 			ev_goals_for = Goal.where(team_id: team_code, is_powerplay: false, is_shorthanded: false, is_penalty_shot: false, season_id: season_id).count
@@ -195,6 +205,7 @@ class Team < ApplicationRecord
 			sh_goals_for = Goal.where(team_id: team_code, is_shorthanded: true, season_id: season_id).count
 			sh_goals_against = Goal.where(opposing_team_id: team_code, is_shorthanded: true, season_id: season_id).count
 			games_played = home_games.count + visiting_games.count
+			unforfeited_games_played = games_played - team_stats[:forfeit_losses] - team_stats[:forfeit_wins]
 			home_ot_games_played = Game.where(home_team_id: team_code, overtime: true, season_id: season_id).count
 			visiting_ot_games_played = Game.where(visiting_team_id: team_code, overtime: true, season_id: season_id).count
 
@@ -220,75 +231,79 @@ class Team < ApplicationRecord
 			team_save_percentage = 1 - (BigDecimal.new(goals_against) / BigDecimal.new(team_stats[:shots_against]))
 			team_shooting_percentage = BigDecimal.new(goals_for) / BigDecimal.new(team_stats[:shots])
 
+		
 			team.update_attributes( games_played: games_played,
-															wins: team_stats[:wins].to_i,
-															row: team_stats[:wins] + team_stats[:ot_wins],
-															losses: team_stats[:losses],
-															so_wins: team_stats[:so_wins],
-															ot_wins: team_stats[:ot_wins],
-															so_losses: team_stats[:so_losses],
-															ot_losses: team_stats[:ot_losses],
-															ot_periods: team_stats[:ot_periods],
-															points: points,
-															points_percentage: points_percentage,
-															penalty_minutes: team_stats[:penalty_minutes],
-															minors: team_stats[:minors],
-															double_minors: team_stats[:double_minors],
-															majors: team_stats[:majors],
-															fights: team_stats[:fights],
-															misconducts: team_stats[:misconducts],
-															game_misconducts: team_stats[:game_misconducts],
-															minors_pg: (BigDecimal.new(team_stats[:minors]) / BigDecimal.new(games_played)),
-															double_minors_pg: (BigDecimal.new(team_stats[:double_minors]) / BigDecimal.new(games_played)),
-															majors_pg: (BigDecimal.new(team_stats[:majors]) / BigDecimal.new(games_played)),
-															fights_pg: (BigDecimal.new(team_stats[:fights]) / BigDecimal.new(games_played)),
-															misconducts_pg: (BigDecimal.new(team_stats[:misconducts]) / BigDecimal.new(games_played)),
-															game_misconducts_pg: (BigDecimal.new(team_stats[:game_misconducts]) / BigDecimal.new(games_played)),
-															shots: team_stats[:shots],
-															shots_against: team_stats[:shots_against],
-															shooting_percent: team_shooting_percentage * 100,
-															save_percent: team_save_percentage * 100,
-															first_period_shots: team_stats[:first_period_shots],
-															second_period_shots: team_stats[:second_period_shots],
-															third_period_shots: team_stats[:third_period_shots],
-															ot_shots: team_stats[:ot_shots],
-															first_period_goals: team_stats[:first_period_goals],
-															second_period_goals: team_stats[:second_period_goals],
-															third_period_goals: team_stats[:third_period_goals],
-															ot_period_goals: team_stats[:ot_goals],
-															first_period_shots_pg: BigDecimal.new(team_stats[:first_period_shots]) / BigDecimal.new(games_played),
-															second_period_shots_pg: BigDecimal.new(team_stats[:second_period_shots]) / BigDecimal.new(games_played),
-															third_period_shots_pg: BigDecimal.new(team_stats[:third_period_shots]) / BigDecimal.new(games_played),
-															ot_period_shots_pg: BigDecimal.new(team_stats[:ot_shots]) / BigDecimal.new(home_ot_games_played + visiting_ot_games_played),
-															first_period_goals_pg: BigDecimal.new(team_stats[:first_period_goals]) / BigDecimal.new(games_played),
-															second_period_goals_pg: BigDecimal.new(team_stats[:second_period_goals]) / BigDecimal.new(games_played),
-															third_period_goals_pg: BigDecimal.new(team_stats[:third_period_goals]) / BigDecimal.new(games_played),
-															ot_period_goals_pg: BigDecimal.new(team_stats[:ot_goals]) / BigDecimal.new(home_ot_games_played + visiting_ot_games_played),
-															goals_for: goals_for,
-															goals_against: goals_against,
-															ev_goals_for: ev_goals_for,
-															ev_goals_against: ev_goals_against,
-															pp_goals_for: pp_goals_for,
-															pp_goals_against: pp_goals_against,
-															sh_goals_for: sh_goals_for,
-															sh_goals_against: sh_goals_against,
-															goals_for_pg: BigDecimal.new(goals_for) / BigDecimal.new(games_played),
-															goals_against_pg: BigDecimal.new(goals_against) / BigDecimal.new(games_played),
-															goals_percent: (BigDecimal.new(goals_for) / (BigDecimal.new(goals_for) + BigDecimal.new(goals_against))) * 100,
-															ev_goals_for_pg: BigDecimal.new(ev_goals_for) / BigDecimal.new(games_played),
-															ev_goals_against_pg: BigDecimal.new(ev_goals_against) / BigDecimal.new(games_played),
-															ev_goals_percent: (BigDecimal.new(ev_goals_for) / (BigDecimal.new(ev_goals_for) + BigDecimal.new(ev_goals_against))) * 100,
-															pp_goals_for_pg: BigDecimal.new(pp_goals_for) / BigDecimal.new(games_played),
-															pp_goals_against_pg: BigDecimal.new(pp_goals_against) / BigDecimal.new(games_played),
-															sh_goals_for_pg: BigDecimal.new(sh_goals_for) / BigDecimal.new(games_played),
-															sh_goals_against_pg: BigDecimal.new(sh_goals_against) / BigDecimal.new(games_played),
-															shots_pg: BigDecimal.new(team_stats[:shots]) / BigDecimal.new(games_played),
-															shots_against_pg: BigDecimal.new(team_stats[:shots_against]) / BigDecimal.new(games_played),
-															shots_percent: BigDecimal.new(team_stats[:shots]) / BigDecimal.new(team_stats[:shots] + team_stats[:shots_against]),
-															shootout_attempts: shootout_attempts.count,
-															shootout_goals: team_stats[:shootout_goals],
-															shootout_percent: BigDecimal.new(team_stats[:shootout_goals]) / BigDecimal.new(shootout_attempts.count),
-															pdo: 	(team_shooting_percentage + team_save_percentage) * 100 )
+									unforfeited_games_played: unforfeited_games_played,
+									wins: team_stats[:wins].to_i,
+									row: team_stats[:wins] + team_stats[:ot_wins],
+									losses: team_stats[:losses],
+									forfeit_wins: team_stats[:forfeit_wins],
+									so_wins: team_stats[:so_wins],
+									ot_wins: team_stats[:ot_wins],
+									so_losses: team_stats[:so_losses],
+									ot_losses: team_stats[:ot_losses],
+									forfeit_losses: team_stats[:forfeit_losses],
+									ot_periods: team_stats[:ot_periods],
+									points: points,
+									points_percentage: points_percentage,
+									penalty_minutes: team_stats[:penalty_minutes],
+									minors: team_stats[:minors],
+									double_minors: team_stats[:double_minors],
+									majors: team_stats[:majors],
+									fights: team_stats[:fights],
+									misconducts: team_stats[:misconducts],
+									game_misconducts: team_stats[:game_misconducts],
+									minors_pg: (BigDecimal.new(team_stats[:minors]) / BigDecimal.new(unforfeited_games_played)),
+									double_minors_pg: (BigDecimal.new(team_stats[:double_minors]) / BigDecimal.new(unforfeited_games_played)),
+									majors_pg: (BigDecimal.new(team_stats[:majors]) / BigDecimal.new(unforfeited_games_played)),
+									fights_pg: (BigDecimal.new(team_stats[:fights]) / BigDecimal.new(unforfeited_games_played)),
+									misconducts_pg: (BigDecimal.new(team_stats[:misconducts]) / BigDecimal.new(unforfeited_games_played)),
+									game_misconducts_pg: (BigDecimal.new(team_stats[:game_misconducts]) / BigDecimal.new(unforfeited_games_played)),
+									shots: team_stats[:shots],
+									shots_against: team_stats[:shots_against],
+									shooting_percent: team_shooting_percentage * 100,
+									save_percent: team_save_percentage * 100,
+									first_period_shots: team_stats[:first_period_shots],
+									second_period_shots: team_stats[:second_period_shots],
+									third_period_shots: team_stats[:third_period_shots],
+									ot_shots: team_stats[:ot_shots],
+									first_period_goals: team_stats[:first_period_goals],
+									second_period_goals: team_stats[:second_period_goals],
+									third_period_goals: team_stats[:third_period_goals],
+									ot_period_goals: team_stats[:ot_goals],
+									first_period_shots_pg: BigDecimal.new(team_stats[:first_period_shots]) / BigDecimal.new(unforfeited_games_played),
+									second_period_shots_pg: BigDecimal.new(team_stats[:second_period_shots]) / BigDecimal.new(unforfeited_games_played),
+									third_period_shots_pg: BigDecimal.new(team_stats[:third_period_shots]) / BigDecimal.new(unforfeited_games_played),
+									ot_period_shots_pg: BigDecimal.new(team_stats[:ot_shots]) / BigDecimal.new(home_ot_games_played + visiting_ot_games_played),
+									first_period_goals_pg: BigDecimal.new(team_stats[:first_period_goals]) / BigDecimal.new(unforfeited_games_played),
+									second_period_goals_pg: BigDecimal.new(team_stats[:second_period_goals]) / BigDecimal.new(unforfeited_games_played),
+									third_period_goals_pg: BigDecimal.new(team_stats[:third_period_goals]) / BigDecimal.new(unforfeited_games_played),
+									ot_period_goals_pg: BigDecimal.new(team_stats[:ot_goals]) / BigDecimal.new(home_ot_games_played + visiting_ot_games_played),
+									goals_for: goals_for,
+									goals_against: goals_against,
+									ev_goals_for: ev_goals_for,
+									ev_goals_against: ev_goals_against,
+									pp_goals_for: pp_goals_for,
+									pp_goals_against: pp_goals_against,
+									sh_goals_for: sh_goals_for,
+									sh_goals_against: sh_goals_against,
+									goals_for_pg: BigDecimal.new(goals_for) / BigDecimal.new(unforfeited_games_played),
+									goals_against_pg: BigDecimal.new(goals_against) / BigDecimal.new(unforfeited_games_played),
+									goals_percent: (BigDecimal.new(goals_for) / (BigDecimal.new(goals_for) + BigDecimal.new(goals_against))) * 100,
+									ev_goals_for_pg: BigDecimal.new(ev_goals_for) / BigDecimal.new(unforfeited_games_played),
+									ev_goals_against_pg: BigDecimal.new(ev_goals_against) / BigDecimal.new(unforfeited_games_played),
+									ev_goals_percent: (BigDecimal.new(ev_goals_for) / (BigDecimal.new(ev_goals_for) + BigDecimal.new(ev_goals_against))) * 100,
+									pp_goals_for_pg: BigDecimal.new(pp_goals_for) / BigDecimal.new(unforfeited_games_played),
+									pp_goals_against_pg: BigDecimal.new(pp_goals_against) / BigDecimal.new(unforfeited_games_played),
+									sh_goals_for_pg: BigDecimal.new(sh_goals_for) / BigDecimal.new(unforfeited_games_played),
+									sh_goals_against_pg: BigDecimal.new(sh_goals_against) / BigDecimal.new(unforfeited_games_played),
+									shots_pg: BigDecimal.new(team_stats[:shots]) / BigDecimal.new(unforfeited_games_played),
+									shots_against_pg: BigDecimal.new(team_stats[:shots_against]) / BigDecimal.new(unforfeited_games_played),
+									shots_percent: BigDecimal.new(team_stats[:shots]) / BigDecimal.new(team_stats[:shots] + team_stats[:shots_against]),
+									shootout_attempts: shootout_attempts.count,
+									shootout_goals: team_stats[:shootout_goals],
+									shootout_percent: BigDecimal.new(team_stats[:shootout_goals]) / BigDecimal.new(shootout_attempts.count),
+									pdo: 	(team_shooting_percentage + team_save_percentage) * 100 )
 		end
 	end
 
