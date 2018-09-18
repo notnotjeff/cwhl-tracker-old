@@ -45,5 +45,4 @@ Rails.application.routes.draw do
 		get '/profile_test', to: 'scraper#profile_test'
 	end
 	
-	get '/.well-known/acme-challenge/:id' => 'static_pages#letsencrypt'
 end
