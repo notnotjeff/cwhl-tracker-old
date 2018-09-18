@@ -43,5 +43,7 @@ Rails.application.routes.draw do
 		get '/update_goalies', to: 'scraper#update_goalies'
 		get '/update_skaters', to: 'scraper#update_skaters'
 		get '/profile_test', to: 'scraper#profile_test'
-  end
+	end
+	
+	get '/.well-known/acme-challenge/:id' => 'static_pages#letsencrypt'
 end
