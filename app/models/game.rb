@@ -182,8 +182,6 @@ class Game < ApplicationRecord
 			dates << date
 		end
 
-		puts dates
-
 		# Cycle Through Each Date And Scrape Game
 		dates.each do |date|
 			scrape_day_of_games(date)
