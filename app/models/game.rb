@@ -168,23 +168,25 @@ class Game < ApplicationRecord
 	end
 
 	def self.scrape_range_of_games(start_date, end_date)
-  	time = Time.now
-  	dates = []
+		time = Time.now
+		dates = []
 
 		# Make Sure Date Exists
-  	return puts "Invalid date inputted" unless start_date.is_a?(Date) && end_date.is_a?(Date)
+		return puts "Invalid date inputted" unless start_date.is_a?(Date) && end_date.is_a?(Date)
 
 		# If games have yet to be played don't scrape
 		return puts "Please scrape this date at a later time once all games are garunteed to be over" if start_date.today? || end_date.today?
 
-  	# Separate Each Day In Range Into Array
-  	(start_date..end_date).each do |date|
-  		dates << date
-	  end
+		# Separate Each Day In Range Into Array
+		(start_date..end_date).each do |date|
+			dates << date
+		end
 
-  	# Cycle Through Each Date And Scrape Game
-  	dates.each do |date|
-  		scrape_day_of_games(date)
+		puts dates
+
+		# Cycle Through Each Date And Scrape Game
+		dates.each do |date|
+			scrape_day_of_games(date)
 		end
 
 		# Update Player Statistics If They Played A Game And Get Player Bio If New To Database
@@ -209,19 +211,19 @@ class Game < ApplicationRecord
 		def self.scrape_day_of_games(date)
 			# Make Sure Date Exists
 			return puts "Invalid date inputted" unless date.is_a?(Date)
-
+			
 			# Convert Date Into Format For Scraper
 			month = date.strftime("%m")
 			date_string = date.strftime("%a, %b %-d")
-
+			
 			# Get Season ID, If It Doesn't Exist Throw Error
 			season_search = Season.where('start_date <= ? AND end_date >= ? AND is_allstar_game = ? AND is_exhibition = ?', date, date, false, false)
 			if season_search.count > 0
 				season_id = season_search.first.cwhl_id
 			else
-				return "Season doesn't exist, please add it."
+				Season.scrape_all_seasons
 			end
-
+			
 			month_url = "https://lscluster.hockeytech.com/feed/index.php?feed=statviewfeed&view=schedule&team=-1&season=#{season_id}&month=#{month}&location=homeaway&key=eb62889ab4dfb04e&client_code=cwhl&site_id=2&league_id=1&division_id=-1&lang=en&callback=angular.callbacks._1"
 
 			games = Game.get_game_urls(month_url, date_string)
