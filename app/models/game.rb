@@ -554,9 +554,14 @@ class Game < ApplicationRecord
 				first_name = skater["info"]["firstName"]
 
 				if skater["info"]["lastName"][-1] == "I" && skater["info"]["lastName"][-2] == " "
-					last_name = skater["info"]["lastName"][0..-2]
+					last_name = skater["info"]["lastName"][0..-3] # Remove the (I) that some names have afterwards
+				elsif skater["info"]["lastName"][-1] == "e" && skater["info"]["lastName"][-2] == " "
+					last_name = skater["info"]["lastName"][0..-3] # Remove the (e) that some names have afterwards
 				elsif skater["info"]["lastName"].include? "{I}"
 					skater["info"]["lastName"].slice! "{I}"
+					last_name = skater["info"]["lastName"].strip
+				elsif skater["info"]["lastName"].include? "{E}"
+					skater["info"]["lastName"].slice! "{E}"
 					last_name = skater["info"]["lastName"].strip
 				elsif skater["info"]["lastName"][-1].include? "(I)"
 					skater["info"]["lastName"].slice! "(I)"
@@ -592,6 +597,12 @@ class Game < ApplicationRecord
 				  
 				if goalie["info"]["lastName"][-1] == "I" && goalie["info"]["lastName"][-2] == " "
 					last_name = goalie["info"]["lastName"][0..-3] # Remove the (I) that some names have afterwards
+				elsif goalie["info"]["lastName"].include? "{I}"
+					goalie["info"]["lastName"].slice! "{I}"
+					last_name = goalie["info"]["lastName"].strip
+				elsif goalie["info"]["lastName"].include? "{E}"
+					goalie["info"]["lastName"].slice! "{E}"
+					last_name = goalie["info"]["lastName"].strip
 				elsif goalie["info"]["lastName"][-1] == "e" && goalie["info"]["lastName"][-2] == " "
 					last_name = goalie["info"]["lastName"][0..-3] # Remove the (e) that some names have afterwards
 				else
