@@ -535,51 +535,61 @@ class Game < ApplicationRecord
 			team_abb = team_data["info"]["abbreviation"]
 
 			# Isolate Coaches, Skaters And Goalies To Be Parsed
-		  coaches_data = team_data["coaches"]
-		  skaters_data = team_data["skaters"]
-		  goalies_data = team_data["goalies"]
+			coaches_data = team_data["coaches"]
+			skaters_data = team_data["skaters"]
+			goalies_data = team_data["goalies"]
 
-		  # Put Coaches Into Hashes
-		  coaches_data.each do |coach|
-		  	role = coach["role"].tr(' ', '_').downcase!
-			  coaches[role] = { first_name: coach["firstName"],
+		  	# Put Coaches Into Hashes
+		  	coaches_data.each do |coach|
+				role = coach["role"].tr(' ', '_').downcase!
+				coaches[role] = { first_name: coach["firstName"],
 													last_name: coach["lastName"],
 													role: coach["role"],
 													team_id: team_id }
-		  end
+			end
 
-		  # Put Skaters Into Hash
-		  skaters_data.each do |skater|
-		  	player_id = skater["info"]["id"].to_i
-			  first_name = skater["info"]["firstName"]
-			  if skater["info"]["lastName"][-1] == "I" && skater["info"]["lastName"][-2] == " "
-					last_name = skater["info"]["lastName"][0..-3] # Remove the (I) that some names have afterwards
-				elsif skater["info"]["lastName"][-1] == "e" && skater["info"]["lastName"][-2] == " "
-					last_name = skater["info"]["lastName"][0..-3] # Remove the (e) that some names have afterwards
-			  else
+		  	# Put Skaters Into Hash
+			skaters_data.each do |skater|
+				player_id = skater["info"]["id"].to_i
+				first_name = skater["info"]["firstName"]
+
+				if skater["info"]["lastName"][-1] == "I" && skater["info"]["lastName"][-2] == " "
+					last_name = skater["info"]["lastName"][0..-2]
+				elsif skater["info"]["lastName"].include? "{I}"
+					skater["info"]["lastName"].slice! "{I}"
+					last_name = skater["info"]["lastName"].strip
+				elsif skater["info"]["lastName"][-1].include? "(I)"
+					skater["info"]["lastName"].slice! "(I)"
+					last_name = skater["info"]["lastName"].strip
+				elsif skater["info"]["lastName"].include? "(e)"
+					skater["info"]["lastName"].slice! "(e)"
+					last_name = skater["info"]["lastName"].strip
+				else
 					last_name = skater["info"]["lastName"]
-			  end
-		  	number = skater["info"]["jerseyNumber"].to_i
-		  	position = skater["info"]["position"]
+				end
 
-		  	shots = skater["stats"]["shots"].to_i
-		  	hits = skater["stats"]["hits"].to_i
-		  	skater["status"].nil? ? nil : captaincy = skater["status"] # Set Captaincy To Nil If Not Assistant Or Captain
+				number = skater["info"]["jerseyNumber"].to_i
+				position = skater["info"]["position"]
 
-		  	skaters[number] = { player_id: player_id,
-		  											team_id: team_id,
-		  											first_name: first_name,
-		  											last_name: last_name,
-		  											number: number,
-		  											position: position,
-		  											shots: shots,
-		  											hits: hits,
-		  											captaincy: captaincy }
-		  end
+				shots = skater["stats"]["shots"].to_i
+				hits = skater["stats"]["hits"].to_i
+				skater["status"].nil? ? nil : captaincy = skater["status"] # Set Captaincy To Nil If Not Assistant Or Captain
 
-		  goalies_data.each do |goalie|
-		  	player_id = goalie["info"]["id"].to_i
-			  first_name = goalie["info"]["firstName"]
+				skaters[number] = { player_id: player_id,
+									team_id: team_id,
+									first_name: first_name,
+									last_name: last_name,
+									number: number,
+									position: position,
+									shots: shots,
+									hits: hits,
+									captaincy: captaincy }
+		  	end
+
+		  	goalies_data.each do |goalie|
+		  		player_id = goalie["info"]["id"].to_i
+				  first_name = goalie["info"]["firstName"]
+				  
 				if goalie["info"]["lastName"][-1] == "I" && goalie["info"]["lastName"][-2] == " "
 					last_name = goalie["info"]["lastName"][0..-3] # Remove the (I) that some names have afterwards
 				elsif goalie["info"]["lastName"][-1] == "e" && goalie["info"]["lastName"][-2] == " "
@@ -587,49 +597,50 @@ class Game < ApplicationRecord
 				else
 					last_name = goalie["info"]["lastName"]
 				end
-		  	number = goalie["info"]["jerseyNumber"].to_i
-		  	position = goalie["info"]["position"]
 
-		  	shots_against = goalie["stats"]["shotsAgainst"].to_i
-		  	goals_against = goalie["stats"]["goalsAgainst"].to_i
-		  	saves = goalie["stats"]["saves"].to_i
-		  	time_on_ice = goalie["stats"]["timeOnIce"]
-		  	goals = goalie["stats"]["goals"].to_i
-		  	assists = goalie["stats"]["assists"].to_i
-		  	points = goalie["stats"]["points"].to_i
+				number = goalie["info"]["jerseyNumber"].to_i
+				position = goalie["info"]["position"]
 
-		  	starting = goalie["starting"].to_i
-		  	captaincy = goalie["status"]
+				shots_against = goalie["stats"]["shotsAgainst"].to_i
+				goals_against = goalie["stats"]["goalsAgainst"].to_i
+				saves = goalie["stats"]["saves"].to_i
+				time_on_ice = goalie["stats"]["timeOnIce"]
+				goals = goalie["stats"]["goals"].to_i
+				assists = goalie["stats"]["assists"].to_i
+				points = goalie["stats"]["points"].to_i
 
-		  	goalies[number] = { player_id: player_id,
-		  											team_id: team_id,
-		  											first_name: first_name,
-		  											last_name: last_name,
-		  											number: number,
-		  											position: position,
-		  											shots_against: shots_against,
-		  											goals_against: goals_against,
-		  											saves: saves,
-		  											time_on_ice: time_in_seconds(time_on_ice),
-		  											goals: goals,
-		  											assists: assists,
-		  											points: points,
-		  											starting: starting,
-		  											captaincy: captaincy }
+				starting = goalie["starting"].to_i
+				captaincy = goalie["status"]
+
+				goalies[number] = { player_id: player_id,
+									team_id: team_id,
+									first_name: first_name,
+									last_name: last_name,
+									number: number,
+									position: position,
+									shots_against: shots_against,
+									goals_against: goals_against,
+									saves: saves,
+									time_on_ice: time_in_seconds(time_on_ice),
+									goals: goals,
+									assists: assists,
+									points: points,
+									starting: starting,
+									captaincy: captaincy }
 		  end
 
 		  return coaches, skaters, goalies, team_city, team_nickname, team_abb
 		end
 
 		def self.boxscore_scrape(home_team_id, visiting_team_id, period_data)
-		  goals = Hash.new
-		  penalties = Hash.new
-		  statlines = Hash.new
+			goals = Hash.new
+			penalties = Hash.new
+			statlines = Hash.new
 
-		  goals, statlines = gather_goals(home_team_id, visiting_team_id, period_data)
-		  penalties = gather_penalties(home_team_id, visiting_team_id, period_data, goals)
+			goals, statlines = gather_goals(home_team_id, visiting_team_id, period_data)
+			penalties = gather_penalties(home_team_id, visiting_team_id, period_data, goals)
 
-		  return goals, penalties, statlines
+			return goals, penalties, statlines
 		end
 
 		def self.gather_goals(home_team_id, visiting_team_id, period_data)
@@ -638,13 +649,12 @@ class Game < ApplicationRecord
 
 			goal_counter = 1
 			home_score = 0
-		  visiting_score = 0
+		  	visiting_score = 0
 
 			period_data.each do |period|
 		  	# Check To Make Sure There Are Goals And Penalties Before Adding To Array
 		  	period_goals_data = period["goals"]
 		  	period_penalties_data = period["penalties"]
-
 
 		  	period_goals_data.each do |goal|
 		  		goals[goal_counter] = {}
@@ -697,15 +707,15 @@ class Game < ApplicationRecord
 			  	goals[goal_counter][:a1_id] = a1_id
 			  	goals[goal_counter][:a2_id] = a2_id
 
-	  	  	goals[goal_counter][:team_player_count] = plus_players_count
-	  	  	goals[goal_counter][:opposing_team_player_count] = minus_players_count
+				goals[goal_counter][:team_player_count] = plus_players_count
+				goals[goal_counter][:opposing_team_player_count] = minus_players_count
 
-	  	  	goals[goal_counter][:is_shorthanded] = ActiveModel::Type::Boolean.new.cast(is_shorthanded)
-	  	  	goals[goal_counter][:is_powerplay] = ActiveModel::Type::Boolean.new.cast(is_powerplay)
-	  	  	goals[goal_counter][:is_empty_net] = ActiveModel::Type::Boolean.new.cast(is_empty_net)
-	  	  	goals[goal_counter][:is_penalty_shot] = ActiveModel::Type::Boolean.new.cast(is_penalty_shot)
-	  	  	goals[goal_counter][:is_game_winning_goal] = ActiveModel::Type::Boolean.new.cast(is_game_winning_goal)
-	  	  	goals[goal_counter][:is_insurance_goal] = ActiveModel::Type::Boolean.new.cast(is_insurance_goal)
+				goals[goal_counter][:is_shorthanded] = ActiveModel::Type::Boolean.new.cast(is_shorthanded)
+				goals[goal_counter][:is_powerplay] = ActiveModel::Type::Boolean.new.cast(is_powerplay)
+				goals[goal_counter][:is_empty_net] = ActiveModel::Type::Boolean.new.cast(is_empty_net)
+				goals[goal_counter][:is_penalty_shot] = ActiveModel::Type::Boolean.new.cast(is_penalty_shot)
+				goals[goal_counter][:is_game_winning_goal] = ActiveModel::Type::Boolean.new.cast(is_game_winning_goal)
+				goals[goal_counter][:is_insurance_goal] = ActiveModel::Type::Boolean.new.cast(is_insurance_goal)
 
 		  		# Create Statlines For Scorers
 		  		scorers = [scorer_id, a1_id, a2_id].compact
@@ -713,97 +723,97 @@ class Game < ApplicationRecord
 
 		  		scorers.each do |scorer|
 		  			statlines[scoring_team_id][scorer] ||= {goals: 0,
-																										a1: 0,
-																										a2: 0,
-																										points: 0,
-																										ev_goals: 0,
-																										ev_a1: 0,
-																										ev_a2: 0,
-																										ev_points: 0,
-																										pp_goals: 0,
-																										pp_a1: 0,
-																										pp_a2: 0,
-																										pp_points: 0,
-																										sh_goals: 0,
-																										sh_a1: 0,
-																										sh_a2: 0,
-																										sh_points: 0,
-																										ps_goals: 0 }
+															a1: 0,
+															a2: 0,
+															points: 0,
+															ev_goals: 0,
+															ev_a1: 0,
+															ev_a2: 0,
+															ev_points: 0,
+															pp_goals: 0,
+															pp_a1: 0,
+															pp_a2: 0,
+															pp_points: 0,
+															sh_goals: 0,
+															sh_a1: 0,
+															sh_a2: 0,
+															sh_points: 0,
+															ps_goals: 0 }
 		  		end
 
-  		  	# Store Counting Stats
-  		  	if is_powerplay == 1
-  		  		statlines[scoring_team_id][scorer_id][:goals] += 1
-  		  		statlines[scoring_team_id][scorer_id][:pp_goals] += 1
-  		  		statlines[scoring_team_id][scorer_id][:points] += 1
-  		  		statlines[scoring_team_id][scorer_id][:pp_points] += 1
+  		  		# Store Counting Stats
+				if is_powerplay == 1
+					statlines[scoring_team_id][scorer_id][:goals] += 1
+					statlines[scoring_team_id][scorer_id][:pp_goals] += 1
+					statlines[scoring_team_id][scorer_id][:points] += 1
+					statlines[scoring_team_id][scorer_id][:pp_points] += 1
 
-  		  		if a1_id != nil
-  			  		statlines[scoring_team_id][a1_id][:a1] += 1
-  			  		statlines[scoring_team_id][a1_id][:pp_a1] += 1
-  			  		statlines[scoring_team_id][a1_id][:points] += 1
-  		  			statlines[scoring_team_id][a1_id][:pp_points] += 1
-  		  		end
+					if a1_id != nil
+						statlines[scoring_team_id][a1_id][:a1] += 1
+						statlines[scoring_team_id][a1_id][:pp_a1] += 1
+						statlines[scoring_team_id][a1_id][:points] += 1
+						statlines[scoring_team_id][a1_id][:pp_points] += 1
+					end
 
-  			  	if a2_id != nil
-  			  		statlines[scoring_team_id][a2_id][:a2] += 1
-  			  		statlines[scoring_team_id][a2_id][:pp_a2] += 1
-  			  		statlines[scoring_team_id][a2_id][:points] += 1
-  		  			statlines[scoring_team_id][a2_id][:pp_points] += 1
-  		  		end
+					if a2_id != nil
+						statlines[scoring_team_id][a2_id][:a2] += 1
+						statlines[scoring_team_id][a2_id][:pp_a2] += 1
+						statlines[scoring_team_id][a2_id][:points] += 1
+						statlines[scoring_team_id][a2_id][:pp_points] += 1
+					end
 
-  		  	elsif is_shorthanded == 1
-  		  		statlines[scoring_team_id][scorer_id][:goals] += 1
-  		  		statlines[scoring_team_id][scorer_id][:sh_goals] += 1
-  		  		statlines[scoring_team_id][scorer_id][:points] += 1
-  		  		statlines[scoring_team_id][scorer_id][:sh_points] += 1
+				elsif is_shorthanded == 1
+					statlines[scoring_team_id][scorer_id][:goals] += 1
+					statlines[scoring_team_id][scorer_id][:sh_goals] += 1
+					statlines[scoring_team_id][scorer_id][:points] += 1
+					statlines[scoring_team_id][scorer_id][:sh_points] += 1
 
-  		  		if a1_id != nil
-  			  		statlines[scoring_team_id][a1_id][:a1] += 1
-  			  		statlines[scoring_team_id][a1_id][:sh_a1] += 1
-  			  		statlines[scoring_team_id][a1_id][:points] += 1
-  			  		statlines[scoring_team_id][a1_id][:sh_points] += 1
-  			  	end
+					if a1_id != nil
+						statlines[scoring_team_id][a1_id][:a1] += 1
+						statlines[scoring_team_id][a1_id][:sh_a1] += 1
+						statlines[scoring_team_id][a1_id][:points] += 1
+						statlines[scoring_team_id][a1_id][:sh_points] += 1
+					end
 
-  		  		if a2_id != nil
-  			  		statlines[scoring_team_id][a2_id][:a2] += 1
-  			  		statlines[scoring_team_id][a2_id][:sh_a2] += 1
-  			  		statlines[scoring_team_id][a2_id][:points] += 1
-  			  		statlines[scoring_team_id][a2_id][:sh_points] += 1
-  			  	end
+					if a2_id != nil
+						statlines[scoring_team_id][a2_id][:a2] += 1
+						statlines[scoring_team_id][a2_id][:sh_a2] += 1
+						statlines[scoring_team_id][a2_id][:points] += 1
+						statlines[scoring_team_id][a2_id][:sh_points] += 1
+					end
 
-  		  	elsif is_penalty_shot == 1
-  		  		statlines[scoring_team_id][scorer_id][:goals] += 1
-  		  		statlines[scoring_team_id][scorer_id][:ps_goals] += 1
-  		  		statlines[scoring_team_id][scorer_id][:points] += 1
-  		  	else # Is Even Strength
-  		  		statlines[scoring_team_id][scorer_id][:goals] += 1
-  		  		statlines[scoring_team_id][scorer_id][:ev_goals] += 1
-  		  		statlines[scoring_team_id][scorer_id][:points] += 1
-  		  		statlines[scoring_team_id][scorer_id][:ev_points] += 1
+				elsif is_penalty_shot == 1
+					statlines[scoring_team_id][scorer_id][:goals] += 1
+					statlines[scoring_team_id][scorer_id][:ps_goals] += 1
+					statlines[scoring_team_id][scorer_id][:points] += 1
+				else # Is Even Strength
+					statlines[scoring_team_id][scorer_id][:goals] += 1
+					statlines[scoring_team_id][scorer_id][:ev_goals] += 1
+					statlines[scoring_team_id][scorer_id][:points] += 1
+					statlines[scoring_team_id][scorer_id][:ev_points] += 1
 
-  		  		if a1_id != nil
-  			  		statlines[scoring_team_id][a1_id][:a1] += 1
-  			  		statlines[scoring_team_id][a1_id][:ev_a1] += 1
-  			  		statlines[scoring_team_id][a1_id][:points] += 1
-  			  		statlines[scoring_team_id][a1_id][:ev_points] += 1
-  			  	end
+					if a1_id != nil
+						statlines[scoring_team_id][a1_id][:a1] += 1
+						statlines[scoring_team_id][a1_id][:ev_a1] += 1
+						statlines[scoring_team_id][a1_id][:points] += 1
+						statlines[scoring_team_id][a1_id][:ev_points] += 1
+					end
 
-  			  	if a2_id != nil
-  			  		statlines[scoring_team_id][a2_id][:a2] += 1
-  			  		statlines[scoring_team_id][a2_id][:ev_a2] += 1
-  			  		statlines[scoring_team_id][a2_id][:points] += 1
-  			  		statlines[scoring_team_id][a2_id][:ev_points] += 1
-  			  	end
-  		  	end
+					if a2_id != nil
+						statlines[scoring_team_id][a2_id][:a2] += 1
+						statlines[scoring_team_id][a2_id][:ev_a2] += 1
+						statlines[scoring_team_id][a2_id][:points] += 1
+						statlines[scoring_team_id][a2_id][:ev_points] += 1
+					end
+				end
 
-  		  	plus_player_ids = get_on_ice_player_ids(plus_players)
-  		  	minus_player_ids = get_on_ice_player_ids(minus_players)
+				plus_player_ids = get_on_ice_player_ids(plus_players)
+				minus_player_ids = get_on_ice_player_ids(minus_players)
 
-  		  	goals[goal_counter][:plus_players] = plus_player_ids
-  		  	goals[goal_counter][:minus_players] = minus_player_ids
+				goals[goal_counter][:plus_players] = plus_player_ids
+				goals[goal_counter][:minus_players] = minus_player_ids
 
-  		  	goal_counter += 1
+				goal_counter += 1
 		  	end
 		  end
 
@@ -814,10 +824,10 @@ class Game < ApplicationRecord
 			player_ids = []
 
 			players.each do |player|
-	  		player_ids << player["id"].to_i
-	  	end
+				player_ids << player["id"].to_i
+			end
 
-	  	return player_ids
+	  		return player_ids
 		end
 
 		def self.gather_penalties(home_team_id, visiting_team_id, period_data, goal_data)
@@ -834,40 +844,40 @@ class Game < ApplicationRecord
 					team_id = penalty["againstTeam"]["id"].to_i
 					team_id == home_team_id ?	opposing_team_id = visiting_team_id :	opposing_team_id = home_team_id
 
-			  	# Parse String And Input Values To Hash
-			  	pp[penalty_counter] = { period: penalty["period"]["id"].to_i }
-			  	pp[penalty_counter][:time] = time_in_seconds(penalty["time"]).to_i
-			  	pp[penalty_counter][:infractor_team_id] = team_id
-			  	pp[penalty_counter][:drawing_team_id] = opposing_team_id
-			  	pp[penalty_counter][:duration] = time_in_seconds(penalty["minutes"]).to_i
-			  	pp[penalty_counter][:description] = penalty["description"]
+					# Parse String And Input Values To Hash
+					pp[penalty_counter] = { period: penalty["period"]["id"].to_i }
+					pp[penalty_counter][:time] = time_in_seconds(penalty["time"]).to_i
+					pp[penalty_counter][:infractor_team_id] = team_id
+					pp[penalty_counter][:drawing_team_id] = opposing_team_id
+					pp[penalty_counter][:duration] = time_in_seconds(penalty["minutes"]).to_i
+					pp[penalty_counter][:description] = penalty["description"]
 
-			  	penalty["takenBy"].nil? ? infractor_id = nil : infractor_id = penalty["takenBy"]["id"].to_i
-			  	penalty["servedBy"].nil? ? served_id = nil : served_id = penalty["servedBy"]["id"].to_i
-			  	pp[penalty_counter][:infractor_id] = infractor_id
-			  	pp[penalty_counter][:served_by_id] = served_id
+					penalty["takenBy"].nil? ? infractor_id = nil : infractor_id = penalty["takenBy"]["id"].to_i
+					penalty["servedBy"].nil? ? served_id = nil : served_id = penalty["servedBy"]["id"].to_i
+					pp[penalty_counter][:infractor_id] = infractor_id
+					pp[penalty_counter][:served_by_id] = served_id
 
-			  	# Get Goals Scored Before Penalty Was Called And Use Last One To Find Current Score
-			  	score_state = goal_data.select {
-			  		|goal_number, goal| (goal[:time] <= pp[penalty_counter][:time] && goal[:period] <= pp[penalty_counter][:period]) || goal[:period] < pp[penalty_counter][:period] }
+					# Get Goals Scored Before Penalty Was Called And Use Last One To Find Current Score
+					score_state = goal_data.select {
+						|goal_number, goal| (goal[:time] <= pp[penalty_counter][:time] && goal[:period] <= pp[penalty_counter][:period]) || goal[:period] < pp[penalty_counter][:period] }
 
-			  	# Compare Team That Scored The Last Goal To Penalized Team And Enter Appropriate Score Accordingly
-			  	if score_state[score_state.count].nil? # Scoreless
-			  		pp[penalty_counter][:team_score] = 0
-			  		pp[penalty_counter][:opposing_team_score] = 0
-			  	elsif score_state[score_state.count][:team_id] == pp[penalty_counter][:infractor_team_id]
-			  		pp[penalty_counter][:team_score] = score_state[score_state.count][:team_score]
-			  		pp[penalty_counter][:opposing_team_score] = score_state[score_state.count][:opposing_team_score]
-			  	else
-			  		pp[penalty_counter][:team_score] = score_state[score_state.count][:opposing_team_score]
-			  		pp[penalty_counter][:opposing_team_score] = score_state[score_state.count][:team_score]
+					# Compare Team That Scored The Last Goal To Penalized Team And Enter Appropriate Score Accordingly
+					if score_state[score_state.count].nil? # Scoreless
+						pp[penalty_counter][:team_score] = 0
+						pp[penalty_counter][:opposing_team_score] = 0
+					elsif score_state[score_state.count][:team_id] == pp[penalty_counter][:infractor_team_id]
+						pp[penalty_counter][:team_score] = score_state[score_state.count][:team_score]
+						pp[penalty_counter][:opposing_team_score] = score_state[score_state.count][:opposing_team_score]
+					else
+						pp[penalty_counter][:team_score] = score_state[score_state.count][:opposing_team_score]
+						pp[penalty_counter][:opposing_team_score] = score_state[score_state.count][:team_score]
+					end
+
+					penalty_counter += 1
 			  	end
-
-			  	penalty_counter += 1
-			  end
 			end
 
-		  return pp
+		  	return pp
 		end
 
 		def self.scrape_shootout_attempts(attempts, shooting_team_id, defending_team_id)
