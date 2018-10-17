@@ -15,3 +15,16 @@ h3 {
     flex: 0 0 45%;
   }
 }
+
+.welcome-heading {
+  text-align: center;
+  padding: 20vh 0;
+
+  h1 {
+    font-size: 80px;
+  }
+
+  .tagline {
+    font-style: italic;
+  }
+}
